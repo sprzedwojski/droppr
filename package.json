@@ -14,6 +14,7 @@
     "kerberos": "0.0.17",
     "mongoose": "^4.2.6",
     "morgan": "~1.6.1",
-    "nconf": "~0.8.2"
+    "nconf": "~0.8.2",
+    "mongoose-timestamp": "~0.4.0"
   }
 }

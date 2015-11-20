@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 /**
  * Author: szymon
  * Creation date: 20.11.15

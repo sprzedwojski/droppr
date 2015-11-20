@@ -3,12 +3,14 @@
  * Creation date: 20.11.15
  * Project: droppr
  */
-
+/* jshint node: true */
+var path = require('path');
 var express = require('express');
 var router = express.Router();
+var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
 
 // GET ==========================================
-
+/* jshint node: true */
 /**
  * GET Details of a user.
  */
@@ -35,6 +37,5 @@ router.put('/:id', function(req, res) {
     // TODO
     res.send({msg : 'TODO will update user details'});
 });
-
 
 module.exports = router;
