@@ -3,7 +3,7 @@
 // External modules
 var express = require('express');
 var path = require('path');
-var logger = require('morgan');
+var logger = require(path.join(__dirname, 'utils', 'logger.js'));
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
@@ -19,13 +19,6 @@ var mongoose = require('mongoose');
 var config = require(path.join(__dirname, 'config', 'config.js'));
 
 var app = express();
-
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
-app.use(cookieParser()); 
 
 mongoose.connect(config.get('db.protocol') + '://' +
   config.get('db.hostname') + ':' +
@@ -47,10 +40,8 @@ app.use('/api/events', events);
 
 // ==============================================
 mongoose.connection.on('open', function() {
-  console.log('Connected to db');
+  logger.info("Connected to the db");
 
-
-  app.use(logger('dev'));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
     extended: false
