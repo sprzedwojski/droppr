@@ -1,6 +1,6 @@
 // External modules
 var express = require('express');
-//var path = require('path'); //is it necessary?
+var path = require('path'); //is it necessary?
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
