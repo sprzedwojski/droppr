@@ -8,6 +8,7 @@ var auth = require('basic-auth')
 
 // Routes
 var users = require('./routes/api/users');
+var events = require('./routes/api/events');
 
 var auth = require('./auth')
 
@@ -23,9 +24,13 @@ app.use(cookieParser());
 // Unauthenticated middleware
 // TODO
 
-app.use(auth);
+
+// TEMP
+//app.use(auth);
+
 // Authenticated middleware
 app.use('/api/users', users);
+app.use('/api/events', events);
 
 // ==============================================
 
