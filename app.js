@@ -5,11 +5,13 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser'); 
-var auth = require('basic-auth');
+var bodyParser = require('body-parser');
+
+var auth = require('./auth');
 
 // Routes
 var users = require('./routes/api/users');
+var userRegister = require('./routes/api/userRegister');
 var events = require('./routes/api/events');
 
 
@@ -34,11 +36,9 @@ mongoose.connect(config.get('db.protocol') + '://' +
 // ROUTES =======================================
 
 // Unauthenticated middleware
-// TODO
+app.use('/api/users', userRegister);
 
-// Routes
-var users = require('./routes/api/users');
-//  app.use(auth);
+app.use(auth);
 
 // Authenticated middleware
 app.use('/api/users', users);
