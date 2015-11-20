@@ -12,12 +12,23 @@ var events = require('./routes/api/events');
 
 var auth = require('./auth')
 
+var mongoose = require('mongoose');
+var config = require(path.join(__dirname, 'config', 'config.js'));
+
 var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(cookieParser());
+
+mongoose.connect(config.get('db.protocol') + '://' +
+    config.get('db.hostname') + ':' +
+    config.get('db.port') + '/' +
+    config.get('db.name')
+);
 
 // ROUTES =======================================
 
@@ -54,8 +65,11 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500).json({msg: "error test prod"});
+    res.status(err.status || 500).json({
+        msg: "error test prod"
+    });
 });
+
 
 
 module.exports = app;
