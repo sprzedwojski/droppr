@@ -10,10 +10,10 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var EventModel = require(path.join(__dirname, '..', '..', 'models', 'event.js'));
-var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
 var mongoose = require('mongoose');
-var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 'eventTypeList.js'))
 mongoose.set('debug', true);
+var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
+var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 'eventTypeList.js'));
 
 // GET ==========================================
 
@@ -22,7 +22,7 @@ mongoose.set('debug', true);
  */
 router.get('/', function(req, res) {
     EventModel.find({}, function(err, events, next) {
-        if(err) {
+        if (err) {
             logger.error("Error fetching all events.");
             return next(err);
         }
@@ -30,14 +30,6 @@ router.get('/', function(req, res) {
         logger.info(events.length + " events found.");
         res.send(events);
     });
-});
-
-/**
- * GET List of event types.
- */
-router.get('/types', function(req, res) {
-    logger.info("Returning all event types.");
-    res.send(eventTypeList);
 });
 
 /**
@@ -57,19 +49,19 @@ router.get('/:id', function(req, res, next) {
  */
 router.get('/:id/participants', function(req, res, next) {
     EventModel.findById(req.params.id)
-    .populate('host guests')
-    .exec(function(err, doc) {
-        if (err) {
-            return next(err);
-        }
-        var participants = buildGetParticipantsJSON(doc);
-        console.log(participants);
-        res.status(200).json(buildGetParticipantsJSON(doc));
-    });
+        .populate('host guests')
+        .exec(function(err, doc) {
+            if (err) {
+                return next(err);
+            }
+            var participants = buildGetParticipantsJSON(doc);
+            console.log(participants);
+            res.status(200).json(participants);
+        });
 });
 
 
-var buildGetParticipantsJSON = function(doc){
+var buildGetParticipantsJSON = function(doc) {
     var participants = doc.guests;
     participants.push(doc.host);
     return {
@@ -77,6 +69,16 @@ var buildGetParticipantsJSON = function(doc){
         participants: participants
     };
 };
+
+/**
+ * GET List of event types.
+ */
+
+router.get('/types', function(req, res) {
+    logger.info("Returning all event types.");
+    res.send(eventTypeList);
+});
+
 
 
 // POST =========================================
@@ -119,6 +121,22 @@ var parsePostEventFields = function(req) {
     return event;
 };
 
+var checkEventExists = function(req, res, next, callback) {
+    EventModel.findById(req.params.id, function(err, doc) {
+        if (err) {
+            return next(err);
+        }
+        if (!doc) {
+            return next({
+                status: 404,
+                message: 'Event does not exist'
+            });
+        } else {
+            callback(req, res, next);
+        }
+    });
+};
+
 /**
  * POST Add user to an event.
  */
@@ -135,12 +153,55 @@ router.post('/:id/users', function(req, res) {
 /**
  * PUT Update an event.
  */
-router.put('/:id', function(req, res) {
-    // TODO
-    res.send({
-        msg: 'TODO will update an event'
+router.put('/:id', function(req, res, next) {
+    checkEventExists(req, res, next, function(req, res, next) {
+        var set = buildPutEventSet(req);
+        EventModel.update({
+            _id: req.params.id
+        }, {
+            $set: set
+        }, function(err) {
+            if (err) {
+                return next(err);
+            }
+            res.status(201).json({
+                msg: 'event updated'
+            });
+        });
     });
+
 });
+
+var buildPutEventSet = function(req) {
+    var set = {};
+    if (req.body.name !== undefined) {
+        set.name = req.body.name;
+    }
+    if (req.body.eventType !== undefined) {
+        set.eventType = req.body.eventType;
+    }
+    if (req.body.lat !== undefined && req.body.lng !== undefined) {
+        set.location = {};
+        set.location.lat = req.body.lat;
+        set.location.lng = req.body.lng;
+    }
+    if (req.body.eventTime !== undefined) {
+        set.eventTime = req.body.eventTime;
+    }
+    if (req.body.host !== undefined) {
+        set.host = req.body.host;
+    }
+    if (req.body.guests !== undefined) {
+        set.guests = JSON.parse(req.body.guests).concat();
+    }
+    if (req.body.minParticipants !== undefined) {
+        set.minParticipants = req.body.minParticipants;
+    }
+    if (req.body.maxParticipants !== undefined) {
+        set.maxParticipants = req.body.maxParticipants;
+    }
+    return set;
+};
 
 
 // DELETE =======================================
@@ -148,7 +209,7 @@ router.put('/:id', function(req, res) {
 /**
  * DELETE Delete an event.
  */
-router.post('/:id', function(req, res) {
+router.delete('/:id', function(req, res) {
     // TODO
     res.send({
         msg: 'TODO will delete an event'
