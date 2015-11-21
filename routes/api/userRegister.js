@@ -20,20 +20,22 @@ router.post('/', function(req, res, next) {
     var name = req.body.name;
     var surname = req.body.surname;
     var email = req.body.email;
-    var pass = req.body.password;
+    var pass = req.body.passwordHash;
 
     var user = new UserModel();
     user.name = name;
     user.surname = surname;
     user.email = email;
-    user.password = pass;
-    user.save(function(err) {
+    user.passwordHash = pass;
+    user.save(function(err, doc) {
         if(err) {
             logger.error("Error saving user to db. Possibly required fields missing.");
             return next(err);
         }
 
-        res.send({msg : 'User registered.'});
+        // Returning the created user
+        logger.debug("New user created: " + doc);
+        res.status(201).send(doc);
     });
 });
 

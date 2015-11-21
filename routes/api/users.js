@@ -10,7 +10,7 @@ var router = express.Router();
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
 
 // GET ==========================================
-/* jshint node: true */
+
 /**
  * GET Details of a user.
  */
@@ -31,7 +31,16 @@ router.get('/:id', function(req, res, next) {
 // PUT ==========================================
 
 router.put('/:id', function(req, res) {
-    // TODO
+
+    var userId = req.params.id;
+
+    UserModel.findById(userId, function(err, doc) {
+        if(err) {
+            logger.error("Error finding user by id");
+            return next(err);
+        }
+    });
+
     res.send({msg : 'TODO will update user details'});
 });
 
