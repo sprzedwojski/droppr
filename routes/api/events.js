@@ -101,10 +101,8 @@ var parsePostEventFields = function(req) {
     var event = new EventModel();
     event.name = req.body.name;
     event.eventType = req.body.eventType;
-    event.location = {
-        lat: req.body.lat,
-        lng: req.body.lng,
-    };
+    event.lat = req.body.lat;
+    event.lng = req.body.lng;
     event.eventTime = req.body.eventTime;
     event.host = req.body.host;
     if (req.body.guests !== undefined) {
@@ -130,7 +128,6 @@ var checkEventExists = function(req, res, next, callback) {
                 message: 'Event does not exist'
             });
         } else {
-            console.log("done");
             callback(req, res, next);
         }
     });
@@ -179,10 +176,11 @@ var buildPutEventSet = function(req) {
     if (req.body.eventType !== undefined) {
         set.eventType = req.body.eventType;
     }
-    if (req.body.lat !== undefined && req.body.lng !== undefined) {
-        set.location = {};
-        set.location.lat = req.body.lat;
-        set.location.lng = req.body.lng;
+    if (req.body.lat !== undefined) {
+        set.lat = req.body.lat;       
+    }
+    if (req.body.lng !== undefined) {
+        set.lng = req.body.lng;       
     }
     if (req.body.eventTime !== undefined) {
         set.eventTime = req.body.eventTime;
@@ -293,9 +291,7 @@ var addUserToEvent = function(userExists, req, callback) {
  */
 router.put('/:id/users/:userId', function(req, res, next) {
     checkEventExists(req, res, next, function(req, res, next){
-        console.log("entered");
         EventModel.update({_id: req.params.id}, {$pull: {guests: req.params.userId}}, function(err){
-            console.log("done2");
             if (err) {
                 return next(err);
             }

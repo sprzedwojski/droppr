@@ -18,11 +18,12 @@ var EventSchema = new Schema({
 		required: true,
 		enum: eventTypeList
 	},
-	location: {
-		type: {
-			lat: Number,
-			lng: Number
-		},
+	lat: {
+		type: Number,			
+		required: true
+	},
+	lng: {
+		type: Number,			
 		required: true
 	},
 	eventTime: {
