@@ -28,7 +28,7 @@ router.get('/', function(req, res) {
 /**
  * GET Details of an event.
  */
-router.get('/:id', function(req, res) {
+router.get('/:id', function(req, res, next) {
     EventModel.findById(req.params.id, function(err, doc) {
         if (err) {
             return next(err);
@@ -41,13 +41,32 @@ router.get('/:id', function(req, res) {
  * GET Participants of an event.
  */
 router.get('/:id/participants', function(req, res, next) {
-   
+    EventModel.findById(req.params.id)
+    .populate('host guests')
+    .exec(function(err, doc) {
+        if (err) {
+            return next(err);
+        }
+        var participants = buildGetParticipantsJSON(doc);
+        console.log(participants);
+        res.status(200).json(buildGetParticipantsJSON(doc));
+    });
 });
+
+
+var buildGetParticipantsJSON = function(doc){
+    var participants = doc.guests;
+    participants.push(doc.host);
+    return {
+        host: doc.host,
+        participants: participants
+    };
+};
 
 /**
  * GET List of event types.
  */
-router.get('/types', function(res, req) {
+router.get('/types', function(req, res) {
     // TODO
     res.send({
         msg: 'TODO will return list of all event types'
