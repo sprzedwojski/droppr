@@ -8,16 +8,19 @@ var path = require('path');
 var express = require('express');
 var router = express.Router();
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
+var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
 
 /**
  * POST User registration.
  */
 router.post('/', function(req, res, next) {
-    // TODO
-    var name = "Szymon";
-    var surname = "Przedwojski";
-    var email = "szym1000@gmail.com";
-    var pass = "superpass";
+    logger.info("Inside POST User registration.");
+    logger.info(req.body);
+
+    var name = req.body.name;
+    var surname = req.body.surname;
+    var email = req.body.email;
+    var pass = req.body.password;
 
     var user = new UserModel();
     user.name = name;
@@ -26,8 +29,7 @@ router.post('/', function(req, res, next) {
     user.password = pass;
     user.save(function(err) {
         if(err) {
-            // TODO handle error
-            console.log("error saving user to db");
+            logger.error("Error saving user to db. Possibly required fields missing.");
             return next(err);
         }
 
@@ -35,4 +37,4 @@ router.post('/', function(req, res, next) {
     });
 });
 
-module.exports = router
+module.exports = router;

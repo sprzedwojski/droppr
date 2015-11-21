@@ -26,28 +26,29 @@ mongoose.connect(config.get('db.protocol') + '://' +
   config.get('db.name')
 );
 
-// ROUTES =======================================
 
-// Unauthenticated middleware
-app.use('/api/users', userRegister);
-
-app.use(auth);
-
-// Authenticated middleware
-app.use('/api/users', users);
-app.use('/api/events', events);
-
-
-// ==============================================
 mongoose.connection.on('open', function() {
   logger.info("Connected to the db");
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({
-    extended: false
+    extended: true
   }));
   app.use(cookieParser());
   app.use(express.static(path.join(__dirname, 'public')));
+
+    // ROUTES =======================================
+
+    // Unauthenticated middleware
+    app.use('/api/users', userRegister);
+
+    app.use(auth);
+
+    // Authenticated middleware
+    app.use('/api/users', users);
+    app.use('/api/events', events);
+
+    // ==============================================
 
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {
