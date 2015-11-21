@@ -16,6 +16,7 @@ function returnUnauthorised(res) {
 };
 
 module.exports = function(req, res, next) {
+    console.log("Beginning authorisation.");
 
     var authUser = auth(req);
     if(!authUser) {

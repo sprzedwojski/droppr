@@ -30,18 +30,18 @@ router.get('/:id', function(req, res, next) {
 
 // PUT ==========================================
 
-router.put('/:id', function(req, res) {
-
-    var userId = req.params.id;
-
-    UserModel.findById(userId, function(err, doc) {
-        if(err) {
-            logger.error("Error finding user by id");
-            return next(err);
-        }
-    });
-
-    res.send({msg : 'TODO will update user details'});
-});
+//router.put('/:id', function(req, res) {
+//
+//    var userId = req.params.id;
+//
+//    UserModel.findById(userId, function(err, doc) {
+//        if(err) {
+//            logger.error("Error finding user by id");
+//            return next(err);
+//        }
+//    });
+//
+//    res.send({msg : 'TODO will update user details'});
+//});
 
 module.exports = router;

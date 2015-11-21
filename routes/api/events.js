@@ -10,7 +10,9 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var EventModel = require(path.join(__dirname, '..', '..', 'models', 'event.js'));
+var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
 var mongoose = require('mongoose');
+var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 'eventTypeList.js'))
 mongoose.set('debug', true);
 
 // GET ==========================================
@@ -19,10 +21,23 @@ mongoose.set('debug', true);
  * GET All events.
  */
 router.get('/', function(req, res) {
-    // TODO
-    res.send({
-        msg: 'TODO will return all events and their basic info'
+    EventModel.find({}, function(err, events, next) {
+        if(err) {
+            logger.error("Error fetching all events.");
+            return next(err);
+        }
+
+        logger.info(events.length + " events found.");
+        res.send(events);
     });
+});
+
+/**
+ * GET List of event types.
+ */
+router.get('/types', function(req, res) {
+    logger.info("Returning all event types.");
+    res.send(eventTypeList);
 });
 
 /**
@@ -42,16 +57,6 @@ router.get('/:id/participants', function(req, res) {
     // TODO
     res.send({
         msg: 'TODO will return all participants of an event'
-    });
-});
-
-/**
- * GET List of event types.
- */
-router.get('/types', function(res, req) {
-    // TODO
-    res.send({
-        msg: 'TODO will return list of all event types'
     });
 });
 
