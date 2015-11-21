@@ -46,7 +46,7 @@ router.post('/', function(req, res, next) {
 
             // Returning the created user
             logger.debug("New user created: " + doc);
-            res.status(201).send(doc);
+            return res.status(201).send(doc);
         });
 
     });

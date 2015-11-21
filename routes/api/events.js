@@ -11,9 +11,9 @@ var router = express.Router();
 var path = require('path');
 var EventModel = require(path.join(__dirname, '..', '..', 'models', 'event.js'));
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
-var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
+var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
 var mongoose = require('mongoose');
-var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 'eventTypeList.js'))
+var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 'eventTypeList.js'));
 var async = require('async');
 mongoose.set('debug', true);
 
@@ -105,11 +105,8 @@ var parsePostEventFields = function(req) {
     var event = new EventModel();
     event.name = req.body.name;
     event.eventType = req.body.eventType;
-    /*event.location = {
-        lat: req.body.lat,
-        lng: req.body.lng,
-    };*/
-    //event.location = JSON.parse(req.body.location);
+    event.lat = req.body.lat;
+    event.lng = req.body.lng;
     event.eventTime = req.body.eventTime;
     event.host = req.body.host;
     if (req.body.guests !== undefined) {
@@ -183,10 +180,11 @@ var buildPutEventSet = function(req) {
     if (req.body.eventType !== undefined) {
         set.eventType = req.body.eventType;
     }
-    if (req.body.lat !== undefined && req.body.lng !== undefined) {
-        set.location = {};
-        set.location.lat = req.body.lat;
-        set.location.lng = req.body.lng;
+    if (req.body.lat !== undefined) {
+        set.lat = req.body.lat;       
+    }
+    if (req.body.lng !== undefined) {
+        set.lng = req.body.lng;       
     }
     if (req.body.eventTime !== undefined) {
         set.eventTime = req.body.eventTime;
@@ -208,19 +206,32 @@ var buildPutEventSet = function(req) {
 /**
  * PUT Add user to an event.
  */
-router.post('/:id/users', function(req, res, next) {
+router.put('/:id/users', function(req, res, next) {
 
-    var userId = req.body.userId;
+    logger.info("BODY:");
+    logger.info(req.body);
+
+    //var user = req.body.user;
+    var userId = req.body._id;
+
+    logger.info("userId: " + userId);
+
     if(userId == null) {
         logger.error("User ID is null.");
-        return res.status(400).json({msg: "User ID is missing"});
+        return res.status(400).json({
+            msg: "User ID is missing"
+        });
     }
 
     async.waterfall([
-        function(callback) {return checkIfUserExists(req, callback)},
-        function(userExists, callback) {return addUserToEvent(userExists, req, callback)}
+        function(callback) {
+            return checkIfUserExists(req, callback);
+        },
+        function(userExists, callback) {
+            return addUserToEvent(userExists, req, callback);
+        }
     ], function(err, result) {
-        if(err) {
+        if (err) {
             logger.error("Error adding user to event.");
             return next(err);
         }
@@ -231,13 +242,13 @@ router.post('/:id/users', function(req, res, next) {
 });
 
 var checkIfUserExists = function(req, callback) {
-    UserModel.findById(req.body.userId, function(err, user) {
-        if(err) {
+    UserModel.findById(req.body._id, function(err, user) {
+        if (err) {
             logger.error("Error finding user by id");
             return callback(err);
         }
 
-        if(!user) {
+        if (!user) {
             return callback(null, false);
         } else {
             return callback(null, true);
@@ -247,27 +258,37 @@ var checkIfUserExists = function(req, callback) {
 
 var addUserToEvent = function(userExists, req, callback) {
     var result = {};
-    if(!userExists) {
+    if (!userExists) {
         result.status = 404;
-        result.message = {msg : "User doesn't exist"};
+        result.message = {
+            msg: "User doesn't exist"
+        };
         return callback(null, result);
     } else {
         EventModel.findById(req.params.id, function(err, event) {
-            if(err) {
+            if (err) {
                 logger.error("Event not found. ID: " + req.params.id);
                 return callback(err);
             }
 
             logger.info("Seems ok so far...");
 
-            EventModel.update({_id: event._id}, {$push: {guests: req.body.userId}}, function(err) {
-                if(err) {
+            EventModel.update({
+                _id: event._id
+            }, {
+                $push: {
+                    guests: req.body._id
+                }
+            }, function(err) {
+                if (err) {
                     logger.error("Problem updating list of event guests");
                     return callback(err);
                 }
 
                 result.status = 200;
-                result.message = {msg: "Guest added to event."};
+                result.message = {
+                    msg: "Guest added to event."
+                };
 
                 return callback(null, result);
             });
@@ -276,25 +297,19 @@ var addUserToEvent = function(userExists, req, callback) {
 };
 
 
-// DELETE =======================================
-
-/**
- * DELETE Delete an event.
- */
-//router.delete('/:id', function(req, res) {
-//    // TODO
-//    res.send({
-//        msg: 'TODO will delete an event'
-//    });
-//});
-
 /**
  * DELETE Remove a user from an event.
  */
-router.post('/:evtId/users/:userId', function(req, res) {
-    // TODO
-    res.send({
-        msg: 'TODO will remove a user from an event'
+router.put('/:id/users/:userId', function(req, res, next) {
+    checkEventExists(req, res, next, function(req, res, next){
+        EventModel.update({_id: req.params.id}, {$pull: {guests: req.params.userId}}, function(err){
+            if (err) {
+                return next(err);
+            }
+            res.status(201).json({
+                msg: 'participant removed'
+            });
+        });
     });
 });
 
