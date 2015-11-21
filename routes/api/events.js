@@ -29,20 +29,19 @@ router.get('/', function(req, res) {
  * GET Details of an event.
  */
 router.get('/:id', function(req, res) {
-    // TODO
-    res.send({
-        msg: 'TODO will return details of an event'
+    EventModel.findById(req.params.id, function(err, doc) {
+        if (err) {
+            return next(err);
+        }
+        res.status(200).json(doc);
     });
 });
 
 /**
  * GET Participants of an event.
  */
-router.get('/:id/participants', function(req, res) {
-    // TODO
-    res.send({
-        msg: 'TODO will return all participants of an event'
-    });
+router.get('/:id/participants', function(req, res, next) {
+   
 });
 
 /**
@@ -62,14 +61,10 @@ router.get('/types', function(res, req) {
  * POST Create a new event.
  */
 router.post('/', function(req, res, next) {
-    console.log(req.body);
-    // TODO
     var event = parsePostEventFields(req);
-    console.log(event);
     event.save(function(err) {
         if (err) {
-            throw err;
-            //return next(err);
+            return next(err);
         }
         res.status(201).json({
             msg: 'event created'
@@ -78,7 +73,7 @@ router.post('/', function(req, res, next) {
 
 });
 
-var parsePostEventFields = function(req){
+var parsePostEventFields = function(req) {
     var event = new EventModel();
     event.name = req.body.name;
     event.eventType = req.body.eventType;
@@ -88,13 +83,13 @@ var parsePostEventFields = function(req){
     };
     event.eventTime = req.body.eventTime;
     event.host = req.body.host;
-    if(req.body.guests !== undefined){
+    if (req.body.guests !== undefined) {
         event.guests = JSON.parse(req.body.guests).concat();
-    }    
-    if(req.body.minParticipants !== undefined){
+    }
+    if (req.body.minParticipants !== undefined) {
         event.minParticipants = req.body.minParticipants;
     }
-    if(req.body.maxParticipants !== undefined){
+    if (req.body.maxParticipants !== undefined) {
         event.maxParticipants = req.body.maxParticipants;
     }
     return event;
