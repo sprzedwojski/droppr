@@ -21,23 +21,24 @@ var config = require(path.join(__dirname, 'config', 'config.js'));
 var app = express();
 
 mongoose.connect(config.get('db.protocol') + '://' +
-  config.get('db.hostname') + ':' +
-  config.get('db.port') + '/' +
-  config.get('db.name')
+    config.get('db.hostname') + ':' +
+    config.get('db.port') + '/' +
+    config.get('db.name')
 );
 
 
 mongoose.connection.on('open', function() {
-  logger.info("Connected to the db");
+    logger.info("Connected to the db");
 
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({
-    extended: true
-  }));
-  app.use(cookieParser());
-  app.use(express.static(path.join(__dirname, 'public')));
 
-    // ROUTES =======================================
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({
+        extended: true
+    }));
+    app.use(cookieParser());
+    app.use(express.static(path.join(__dirname, 'public'))); 
+
+
 
     // Unauthenticated middleware
     app.use('/api/users', userRegister);
@@ -50,61 +51,37 @@ mongoose.connection.on('open', function() {
 
     // ==============================================
 
-  // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  });
+    // catch 404 and forward to error handler
+    app.use(function(req, res, next) {
+        var err = new Error('Not Found');
+        err.status = 404;
+        next(err);
+    });
 
-  // error handlers
 
-  // development error handler
-  // will print stacktrace
-  if (app.get('env') === 'development') {
+    // error handlers
+
+    // development error handler
+    // will print stacktrace
+    if (app.get('env') === 'development') {
+        app.use(function(err, req, res, next) {
+            console.log(err);
+            res.status(err.status || 500);
+            res.render('error', {
+                message: err.message,
+                error: err
+            });
+        });
+    }
+
+    // production error handler
+    // no stacktraces leaked to user
     app.use(function(err, req, res, next) {
-      res.status(err.status || 500);
-      res.render('error', {
-        message: err.message,
-        error: err
-      });
+        console.log(err);
+        res.status(err.status || 500).json({
+            msg: "error test"
+        });
     });
-  }
-
-  // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  });
-
-  // production error handler
-  // no stacktraces leaked to user
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500).json({
-      msg: "error test"
-    });
-  });
-
-  // error handlers
-
-  // development error handler
-  // will print stacktrace
-  if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-      res.status(err.status || 500).json({
-        msg: "error test"
-      });
-    });
-  }
-
-  // production error handler
-  // no stacktraces leaked to user
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500).json({
-      msg: "error test prod"
-    });
-  });
 });
 
 

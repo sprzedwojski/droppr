@@ -8,7 +8,10 @@
 
 var express = require('express');
 var router = express.Router();
-
+var path = require('path');
+var EventModel = require(path.join(__dirname, '..', '..', 'models', 'event.js'));
+var mongoose = require('mongoose');
+mongoose.set('debug', true);
 
 // GET ==========================================
 
@@ -17,7 +20,9 @@ var router = express.Router();
  */
 router.get('/', function(req, res) {
     // TODO
-    res.send({msg : 'TODO will return all events and their basic info'});
+    res.send({
+        msg: 'TODO will return all events and their basic info'
+    });
 });
 
 /**
@@ -25,7 +30,9 @@ router.get('/', function(req, res) {
  */
 router.get('/:id', function(req, res) {
     // TODO
-    res.send({msg : 'TODO will return details of an event'});
+    res.send({
+        msg: 'TODO will return details of an event'
+    });
 });
 
 /**
@@ -33,15 +40,19 @@ router.get('/:id', function(req, res) {
  */
 router.get('/:id/participants', function(req, res) {
     // TODO
-    res.send({msg : 'TODO will return all participants of an event'});
+    res.send({
+        msg: 'TODO will return all participants of an event'
+    });
 });
 
 /**
  * GET List of event types.
  */
-router.get('/types', function (res, req) {
+router.get('/types', function(res, req) {
     // TODO
-    res.send({msg : 'TODO will return list of all event types'});
+    res.send({
+        msg: 'TODO will return list of all event types'
+    });
 });
 
 
@@ -50,17 +61,53 @@ router.get('/types', function (res, req) {
 /**
  * POST Create a new event.
  */
-router.post('/', function(req, res) {
+router.post('/', function(req, res, next) {
+    console.log(req.body);
     // TODO
-    res.send({msg : 'TODO will create a new event'});
+    var event = parsePostEventFields(req);
+    console.log(event);
+    event.save(function(err) {
+        if (err) {
+            throw err;
+            //return next(err);
+        }
+        res.status(201).json({
+            msg: 'event created'
+        });
+    });
+
 });
+
+var parsePostEventFields = function(req){
+    var event = new EventModel();
+    event.name = req.body.name;
+    event.eventType = req.body.eventType;
+    event.location = {
+        lat: req.body.lat,
+        lng: req.body.lng,
+    };
+    event.eventTime = req.body.eventTime;
+    event.host = req.body.host;
+    if(req.body.guests !== undefined){
+        event.guests = JSON.parse(req.body.guests).concat();
+    }    
+    if(req.body.minParticipants !== undefined){
+        event.minParticipants = req.body.minParticipants;
+    }
+    if(req.body.maxParticipants !== undefined){
+        event.maxParticipants = req.body.maxParticipants;
+    }
+    return event;
+};
 
 /**
  * POST Add user to an event.
  */
 router.post('/:id/users', function(req, res) {
     // TODO
-    res.send({msg : 'TODO will add a user to an event'});
+    res.send({
+        msg: 'TODO will add a user to an event'
+    });
 });
 
 
@@ -71,7 +118,9 @@ router.post('/:id/users', function(req, res) {
  */
 router.put('/:id', function(req, res) {
     // TODO
-    res.send({msg : 'TODO will update an event'});
+    res.send({
+        msg: 'TODO will update an event'
+    });
 });
 
 
@@ -82,7 +131,9 @@ router.put('/:id', function(req, res) {
  */
 router.post('/:id', function(req, res) {
     // TODO
-    res.send({msg : 'TODO will delete an event'});
+    res.send({
+        msg: 'TODO will delete an event'
+    });
 });
 
 /**
@@ -90,7 +141,9 @@ router.post('/:id', function(req, res) {
  */
 router.post('/:evtId/users/:userId', function(req, res) {
     // TODO
-    res.send({msg : 'TODO will remove a user from an event'});
+    res.send({
+        msg: 'TODO will remove a user from an event'
+    });
 });
 
 
