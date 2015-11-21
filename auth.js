@@ -43,9 +43,9 @@ module.exports = function(req, res, next) {
 
         console.log("doc: " + doc);
         console.log(doc.email);
-        console.log(">> password from db: " + doc.password);
+        console.log(">> password from db: " + doc.passwordHash);
 
-        if(doc.password == authUser.pass) {
+        if(doc.passwordHash == authUser.pass) {
             console.log("user authorised");
             return next();
         } else {
