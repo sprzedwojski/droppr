@@ -87,6 +87,10 @@ var buildGetParticipantsJSON = function(doc) {
  * POST Create a new event.
  */
 router.post('/', function(req, res, next) {
+
+    logger.info("BODY:");
+    logger.info(req.body);
+
     var event = parsePostEventFields(req);
     event.save(function(err) {
         if (err) {
@@ -101,10 +105,11 @@ var parsePostEventFields = function(req) {
     var event = new EventModel();
     event.name = req.body.name;
     event.eventType = req.body.eventType;
-    event.location = {
+    /*event.location = {
         lat: req.body.lat,
         lng: req.body.lng,
-    };
+    };*/
+    //event.location = JSON.parse(req.body.location);
     event.eventTime = req.body.eventTime;
     event.host = req.body.host;
     if (req.body.guests !== undefined) {

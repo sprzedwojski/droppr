@@ -22,21 +22,35 @@ router.post('/', function(req, res, next) {
     var email = req.body.email;
     var pass = req.body.passwordHash;
 
-    var user = new UserModel();
-    user.name = name;
-    user.surname = surname;
-    user.email = email;
-    user.passwordHash = pass;
-    user.save(function(err, doc) {
-        if(err) {
-            logger.error("Error saving user to db. Possibly required fields missing.");
-            return next(err);
+    UserModel.findOne({email:email}, function(err, doc) {
+         if(err) {
+             logger.error("Problem while finding user.");
+             return next(err);
+         }
+
+        if(doc) {
+            logger.error("User email already taken.")
+            return res.status(401).json({msg:"User email already taken."});
         }
 
-        // Returning the created user
-        logger.debug("New user created: " + doc);
-        res.status(201).send(doc);
+        var user = new UserModel();
+        user.name = name;
+        user.surname = surname;
+        user.email = email;
+        user.passwordHash = pass;
+        user.save(function(err, doc) {
+            if(err) {
+                logger.error("Error saving user to db. Possibly required fields missing.");
+                return next(err);
+            }
+
+            // Returning the created user
+            logger.debug("New user created: " + doc);
+            res.status(201).send(doc);
+        });
+
     });
+
 });
 
 module.exports = router;
