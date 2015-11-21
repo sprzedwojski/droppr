@@ -1,6 +1,11 @@
 /* jshint node: true */
 module.exports = [
-	"piłka nożna",
-	"tenis",
-	"piłka ręczna"
+	"Piłka nożna",
+	"Tenis",
+	"Piłka ręczna",
+    "Koszykówka",
+    "Siatkówka",
+    "Ping-pong",
+    "Bieganie",
+    "Rower"
 ];

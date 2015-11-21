@@ -10,9 +10,11 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var EventModel = require(path.join(__dirname, '..', '..', 'models', 'event.js'));
+var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
 var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
 var mongoose = require('mongoose');
 var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 'eventTypeList.js'))
+var async = require('async');
 mongoose.set('debug', true);
 
 // GET ==========================================
@@ -90,9 +92,7 @@ router.post('/', function(req, res, next) {
         if (err) {
             return next(err);
         }
-        res.status(201).json({
-            msg: 'event created'
-        });
+        res.status(201).json(event);
     });
 
 });
@@ -119,16 +119,6 @@ var parsePostEventFields = function(req) {
     return event;
 };
 
-/**
- * POST Add user to an event.
- */
-router.post('/:id/users', function(req, res) {
-    // TODO
-    res.send({
-        msg: 'TODO will add a user to an event'
-    });
-});
-
 
 // PUT ==========================================
 
@@ -142,6 +132,75 @@ router.put('/:id', function(req, res) {
     });
 });
 
+/**
+ * PUT Add user to an event.
+ */
+router.post('/:id/users', function(req, res, next) {
+
+    var userId = req.body.userId;
+    if(userId == null) {
+        logger.error("User ID is null.");
+        return res.status(400).json({msg: "User ID is missing"});
+    }
+
+    async.waterfall([
+        function(callback) {return checkIfUserExists(req, callback)},
+        function(userExists, callback) {return addUserToEvent(userExists, req, callback)}
+    ], function(err, result) {
+        if(err) {
+            logger.error("Error adding user to event.");
+            return next(err);
+        }
+        logger.info(result.status + " " + result.message);
+        return res.status(result.status).json(result.message);
+    });
+
+});
+
+var checkIfUserExists = function(req, callback) {
+    UserModel.findById(req.body.userId, function(err, user) {
+        if(err) {
+            logger.error("Error finding user by id");
+            return callback(err);
+        }
+
+        if(!user) {
+            return callback(null, false);
+        } else {
+            return callback(null, true);
+        }
+    });
+};
+
+var addUserToEvent = function(userExists, req, callback) {
+    var result = {};
+    if(!userExists) {
+        result.status = 404;
+        result.message = {msg : "User doesn't exist"};
+        return callback(null, result);
+    } else {
+        EventModel.findById(req.params.id, function(err, event) {
+            if(err) {
+                logger.error("Event not found. ID: " + req.params.id);
+                return callback(err);
+            }
+
+            logger.info("Seems ok so far...");
+
+            EventModel.update({_id: event._id}, {$push: {guests: req.body.userId}}, function(err) {
+                if(err) {
+                    logger.error("Problem updating list of event guests");
+                    return callback(err);
+                }
+
+                result.status = 200;
+                result.message = {msg: "Guest added to event."};
+
+                return callback(null, result);
+            });
+        });
+    }
+};
 
 // DELETE =======================================
 
@@ -155,15 +214,15 @@ router.post('/:id', function(req, res) {
     });
 });
 
-/**
- * DELETE Remove a user from an event.
- */
-router.post('/:evtId/users/:userId', function(req, res) {
-    // TODO
-    res.send({
-        msg: 'TODO will remove a user from an event'
-    });
-});
+///**
+// * DELETE Remove a user from an event.
+// */
+//router.post('/:evtId/users/:userId', function(req, res) {
+//    // TODO
+//    res.send({
+//        msg: 'TODO will remove a user from an event'
+//    });
+//});
 
 
 module.exports = router;

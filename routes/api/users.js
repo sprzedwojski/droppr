@@ -16,13 +16,18 @@ var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
  */
 router.get('/:id', function(req, res, next) {
     var userId = req.params.id;
-    UserModel.findById(userId, function(err, doc) {
+    UserModel.findById(userId, function(err, user) {
         if(err) {
             console.log("error finding user by id");
             return next(err);
         }
 
-        res.send(doc);
+        if(!user) {
+            console.log("User with id " + userId + " not found.");
+            return res.status(404).json({msg: "User not found."});
+        }
+
+        res.send(user);
     });
 });
 
