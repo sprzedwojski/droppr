@@ -1,0 +1,8 @@
+{
+   "db.protocol": "mongodb",
+   "db.user": "",
+   "db.password": "",
+   "db.hostname": "127.0.0.1",
+   "db.port": 27017,
+   "db.name": "sc"
+ }
