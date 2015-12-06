@@ -1,0 +1,8 @@
+{
+   "db.protocol": "mongodb",
+   "db.user": "",
+   "db.password": "",
+   "db.hostname": "192.168.1.113",
+   "db.port": 27017,
+   "db.name": "droppr_db_2"
+ }
