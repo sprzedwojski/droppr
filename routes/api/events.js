@@ -140,12 +140,12 @@ var checkEventExists = function(req, res, next, callback) {
 /**
  * POST Add user to an event.
  */
-router.post('/:id/users', function(req, res) {
+/*router.post('/:id/users', function(req, res) {
     // TODO
     res.send({
         msg: 'TODO will add a user to an event'
     });
-});
+});*/
 
 
 // PUT ==========================================
