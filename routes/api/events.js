@@ -203,6 +203,7 @@ var buildPutEventSet = function(req) {
     }
     return set;
 };
+
 /**
  * PUT Add user to an event.
  */

@@ -12,6 +12,7 @@ var auth = require('./auth');
 // Routes
 var users = require('./routes/api/users');
 var userRegister = require('./routes/api/userRegister');
+var googleAuth = require('./routes/api/googleAuth');
 var events = require('./routes/api/events');
 
 
@@ -36,11 +37,12 @@ mongoose.connection.on('open', function() {
         extended: true
     }));
     app.use(cookieParser());
-    app.use(express.static(path.join(__dirname, 'public'))); 
+    app.use(express.static(path.join(__dirname, 'public')));
 
 
 
     // Unauthenticated middleware
+    app.use('/api', googleAuth);
     app.use('/api/users', userRegister);
 
     app.use(auth);
@@ -79,7 +81,7 @@ mongoose.connection.on('open', function() {
     app.use(function(err, req, res, next) {
         console.log(err);
         res.status(err.status || 500).json({
-            msg: "error test"
+            msg: err.toString()
         });
     });
 });

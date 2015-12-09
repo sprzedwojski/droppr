@@ -2,6 +2,8 @@
   <configuration default="false" name="bin/www" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="/usr/bin/node" path-to-js-file="bin/www" working-dir="$PROJECT_DIR$">
     <envs>
       <env name="DEBUG" value="droppr:*" />
+      <env name="NODE_ENV" value="szymon" />
+      <env name="GOOGLE_APPLICATION_CREDENTIALS" value="/home/szymon/google/auth/Sports Connect-a71a8068c18f.json" />
     </envs>
     <browser url="http://localhost:3000/" />
     <method />
