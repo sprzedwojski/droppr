@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4b0bb323-a2df-4059-9f0a-80d7d23a55fb" name="Default" comment="Google auth configured (test mode).">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/routes/api/googleAuth.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" afterPath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api/events.js" afterPath="$PROJECT_DIR$/routes/api/events.js" />
+    <list default="true" id="4b0bb323-a2df-4059-9f0a-80d7d23a55fb" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/api/googleAuth.js" afterPath="$PROJECT_DIR$/routes/api/googleAuth.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="droppr.iws" />
@@ -29,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.2034483">
+            <state vertical-scroll-proportion="0.0">
               <caret line="80" column="36" selection-start-line="80" selection-start-column="36" selection-end-line="80" selection-end-column="36" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
@@ -51,11 +48,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="googleAuth.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="googleAuth.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/api/googleAuth.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+            <state vertical-scroll-proportion="0.31034482">
+              <caret line="9" column="48" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
               <folding>
                 <element signature="e#0#71#0" expanded="false" />
               </folding>
@@ -70,7 +67,7 @@
           </provider>
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-4.5666666">
-              <caret line="857" column="59" selection-start-line="857" selection-start-column="59" selection-end-line="857" selection-end-column="59" />
+              <caret line="863" column="59" selection-start-line="863" selection-start-column="59" selection-end-line="863" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -688,7 +685,7 @@
       <workItem from="1449401610352" duration="1341000" />
       <workItem from="1449403170593" duration="6163000" />
       <workItem from="1449683462739" duration="7860000" />
-      <workItem from="1449692039166" duration="8191000" />
+      <workItem from="1449692039166" duration="11912000" />
     </task>
     <task id="LOCAL-00001" summary="Google auth library added.">
       <created>1449406170010</created>
@@ -696,11 +693,17 @@
       <option name="project" value="LOCAL" />
       <updated>1449406170010</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Google auth configured (test mode).">
+      <created>1449701089418</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1449701089418</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="68084000" />
+    <option name="totallyTimeSpent" value="71805000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="37" y="24" width="1329" height="744" extended-state="6" />
@@ -1162,7 +1165,7 @@
       </provider>
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-4.5666666">
-          <caret line="857" column="59" selection-start-line="857" selection-start-column="59" selection-end-line="857" selection-end-column="59" />
+          <caret line="863" column="59" selection-start-line="863" selection-start-column="59" selection-end-line="863" selection-end-column="59" />
           <folding />
         </state>
       </provider>
@@ -1218,6 +1221,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="80" column="36" selection-start-line="80" selection-start-column="36" selection-end-line="80" selection-end-column="36" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api/events.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1228,20 +1241,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/api/googleAuth.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+        <state vertical-scroll-proportion="0.31034482">
+          <caret line="9" column="48" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
           <folding>
             <element signature="e#0#71#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.2034483">
-          <caret line="80" column="36" selection-start-line="80" selection-start-column="36" selection-end-line="80" selection-end-column="36" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -14,16 +14,32 @@ var TEST_CLIENT_ID = "407408718192.apps.googleusercontent.com";
 // "Node DEV" in Google Developer Console
 var NODE_DEV_CLIENT_ID = "24532706524-aopb1njpu7mraqtlp9a8qbso3fltrns7.apps.googleusercontent.com";
 
+router.post('/tokensigninTest', function(req,res,next) {
+    var token = req.body.token;
+    if(!token) {
+        return next("Token is missing from request parameters.");
+    }
+
+    authenticate(token, TEST_CLIENT_ID, function(err, login) {
+        if(err) {
+            return next(err);
+        }
+
+        logger.info("Ending tokensignin test");
+
+        res.status(200).json({msg: "Authenticated", "login": login.getPayload()});
+    })
+
+});
+
 router.post('/tokensignin', function(req,res,next) {
     var token = req.body.token;
     if(!token) {
         return next("Token is missing from request parameters.");
     }
 
-    // TODO change TEST_CLIENT_ID to NODE_DEV_CLIENT_ID when the Android app will be ready
-    authenticate(token, TEST_CLIENT_ID, function(err, login) {
+    authenticate(token, NODE_DEV_CLIENT_ID, function(err, login) {
         if(err) {
-            //res.status(400).json({msg: err.toString()});
             return next(err);
         }
 
