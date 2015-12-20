@@ -1,8 +1,10 @@
 {
-   "db.protocol": "mongodb",
-   "db.user": "",
-   "db.password": "",
-   "db.hostname": "localhost",
-   "db.port": 27017,
-   "db.name": "droppr_db_2"
- }
+	"db.protocol": "mongodb",
+	"db.user": "",
+	"db.password": "",
+	"db.hostname": "localhost",
+	"db.port": 27017,
+	"db.name": "droppr_db_2",
+	"server.address": "http://localhost:3000/",
+	"server.port": "3000"
+}

@@ -20,6 +20,7 @@ var mongoose = require('mongoose');
 var config = require(path.join(__dirname, 'config', 'config.js'));
 
 var app = express();
+var logger = require(path.join(__dirname, 'utils', 'logger.js'));
 
 mongoose.connect(config.get('db.protocol') + '://' +
     config.get('db.hostname') + ':' +
@@ -84,6 +85,10 @@ mongoose.connection.on('open', function() {
             msg: err.toString()
         });
     });
+
+    app.listen(config.get('server.port'));
+    logger.info('Application running on: ' + config.get('server.port'));
+    logger.info('Run mode: ' + app.get('env'));
 });
 
 
