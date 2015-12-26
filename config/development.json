@@ -1,10 +1,12 @@
 {
-	"db.protocol": "mongodb",
-	"db.user": "",
-	"db.password": "",
-	"db.hostname": "localhost",
-	"db.port": 27017,
-	"db.name": "droppr_db_2",
-	"server.address": "http://localhost:3000/",
-	"server.port": "3000"
+  "db.protocol": "mongodb",
+  "db.user": "",
+  "db.password": "",
+  "db.hostname": "localhost",
+  "db.port": 27017,
+  "db.name": "droppr_db_2",
+  "auth.test_client_id": "407408718192.apps.googleusercontent.com",
+  "auth.node_dev_client_id": "24532706524-aopb1njpu7mraqtlp9a8qbso3fltrns7.apps.googleusercontent.com",
+  "server.address": "http://localhost:3000/",
+  "server.port": "3000"
 }
