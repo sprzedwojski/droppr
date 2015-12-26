@@ -1,3 +1,5 @@
+/* jshint node: true */
+
 /**
  * Author: szymon
  * Creation date: 20.11.15
@@ -29,7 +31,7 @@ router.post('/', function(req, res, next) {
          }
 
         if(doc) {
-            logger.error("User email already taken.")
+            logger.error("User email already taken.");
             return res.status(401).json({msg:"User email already taken."});
         }
 

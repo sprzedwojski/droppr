@@ -35,7 +35,7 @@ module.exports = function(req, res, next) {
             return returnUnauthorised(res);
         }
 
-        if(doc.length === 0) {
+        if(doc === null || doc.length === 0) {
             // TODO
             // brak usera
             console.log("no user found");

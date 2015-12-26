@@ -30,3 +30,6 @@ node_modules
 # Intellij Idea
 .idea
 *.iml
+
+# HTTPS
+ssl
