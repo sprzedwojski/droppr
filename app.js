@@ -7,20 +7,18 @@ var logger = require(path.join(__dirname, 'utils', 'logger.js'));
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var auth = require('./auth');
+var auth = require(path.join(__dirname, 'auth.js'));
 
 // Routes
-var users = require('./routes/api/users');
-var userRegister = require('./routes/api/userRegister');
-var googleAuth = require('./routes/api/googleAuth');
-var events = require('./routes/api/events');
+var users = require(path.join(__dirname, 'routes','api','users'));
+var userRegister = require(path.join(__dirname, 'routes','api','userRegister'));
+var googleAuth = require(path.join(__dirname, 'routes','api','googleAuth'));
+var events = require(path.join(__dirname, 'routes','api','events'));
 
 
 var mongoose = require('mongoose');
 var config = require(path.join(__dirname, 'config', 'config.js'));
-
 var app = express();
-var logger = require(path.join(__dirname, 'utils', 'logger.js'));
 
 mongoose.connect(config.get('db.protocol') + '://' +
     config.get('db.hostname') + ':' +
@@ -68,11 +66,10 @@ mongoose.connection.on('open', function() {
     // will print stacktrace
     if (app.get('env') === 'development') {
         app.use(function(err, req, res, next) {
+             //TODO 
             console.log(err);
-            res.status(err.status || 500);
-            res.render('error', {
-                message: err.message,
-                error: err
+            res.status(err.status || 500).json({
+                msg: err.toString()
             });
         });
     }
@@ -80,6 +77,7 @@ mongoose.connection.on('open', function() {
     // production error handler
     // no stacktraces leaked to user
     app.use(function(err, req, res, next) {
+         //TODO 
         console.log(err);
         res.status(err.status || 500).json({
             msg: err.toString()
