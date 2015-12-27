@@ -7,6 +7,9 @@ var logger = require(path.join(__dirname, 'utils', 'logger.js'));
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var https = require('https');
+var fs = require('fs');
+
 var auth = require(path.join(__dirname, 'auth.js'));
 
 // Routes
@@ -84,7 +87,19 @@ mongoose.connection.on('open', function() {
         });
     });
 
-    app.listen(config.get('server.port'));
+
+    /**
+     * Create HTTPS server
+     */
+    var options = {
+        key  : fs.readFileSync('ssl/key.pem'),
+        ca   : fs.readFileSync('ssl/csr.pem'),
+        cert : fs.readFileSync('ssl/cert.pem')
+    };
+    var server = https.createServer(options, app);
+    server.listen(config.get('server.port'));
+
+
     logger.info('Application running on: ' + config.get('server.port'));
     logger.info('Run mode: ' + app.get('env'));
 });
