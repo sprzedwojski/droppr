@@ -63,7 +63,6 @@ router.get('/:id/participants', function(req, res, next) {
                 return next(err);
             }
             var participants = eventUtils.buildGetParticipantsJSON(doc);
-            console.log(participants);
             res.status(200).json(participants);
         });
 });

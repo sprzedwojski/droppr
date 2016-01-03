@@ -13,6 +13,7 @@ var path = require('path');
 var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
 var config = require(path.join(__dirname, '..', '..', 'config', 'config.js'));
 var googleAuthUtils = require(path.join(__dirname, '..', 'utils', 'googleAuthUtils.js'));
+var statusCodes = require('http-status-codes');
 
 // "Node DEV" in Google Developer Console
 var NODE_DEV_CLIENT_ID = config.get('auth.node_dev_client_id');
@@ -34,7 +35,7 @@ var postTokenSignIn = function(req,res,next) {
 
         logger.info("Ending tokensignin");
 
-        res.status(200).json({msg: "Authenticated", "login": login.getPayload()});
+        res.status(statusCodes.OK).json({msg: "Authenticated", "login": login.getPayload()});
 
     });
 };
@@ -53,7 +54,7 @@ var postTokenSignInTest = function(req,res,next) {
 
         logger.info("Ending tokensignin test");
 
-        res.status(200).json({msg: "Authenticated", "login": login.getPayload()});
+        res.status(statusCodes.OK).json({msg: "Authenticated", "login": login.getPayload()});
     });
 };
 

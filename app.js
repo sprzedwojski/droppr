@@ -7,7 +7,8 @@ var logger = require(path.join(__dirname, 'utils', 'logger.js'));
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var https = require('https');
+// var https = require('https');
+var http = require('http');
 var fs = require('fs');
 
 var auth = require(path.join(__dirname, 'auth.js'));
@@ -55,14 +56,6 @@ mongoose.connection.on('open', function() {
 
     // ==============================================
 
-    // catch 404 and forward to error handler
-    app.use(function(req, res, next) {
-        var err = new Error('Not Found');
-        err.status = 404;
-        next(err);
-    });
-
-
     // error handlers
 
     // development error handler
@@ -92,12 +85,12 @@ mongoose.connection.on('open', function() {
      * Create HTTPS server
      */
     var options = {
-        key  : fs.readFileSync('ssl/key.pem'),
-        ca   : fs.readFileSync('ssl/csr.pem'),
-        cert : fs.readFileSync('ssl/cert.pem')
+        // key  : fs.readFileSync('ssl/key.pem'),
+        // ca   : fs.readFileSync('ssl/csr.pem'),
+        // cert : fs.readFileSync('ssl/cert.pem')
     };
-    var server = https.createServer(options, app);
-    server.listen(config.get('server.port'));
+    // var server = http.createServer(options, app);
+    app.listen(config.get('server.port'));
 
 
     logger.info('Application running on: ' + config.get('server.port'));

@@ -11,6 +11,7 @@ var express = require('express');
 var router = express.Router();
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
 var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
+var statusCodes = require('http-status-codes');
 
 /**
  * POST User registration.
@@ -32,7 +33,7 @@ router.post('/', function(req, res, next) {
 
         if(doc) {
             logger.error("User email already taken.");
-            return res.status(401).json({msg:"User email already taken."});
+            return res.status(statusCodes.UNAUTHORIZED).json({msg:"User email already taken."});
         }
 
         var user = new UserModel();
@@ -48,7 +49,7 @@ router.post('/', function(req, res, next) {
 
             // Returning the created user
             logger.debug("New user created: " + doc);
-            return res.status(201).send(doc);
+            return res.status(statusCodes.CREATED).json(doc);
         });
 
     });
