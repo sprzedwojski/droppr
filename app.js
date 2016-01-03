@@ -3,25 +3,24 @@
 // External modules
 var express = require('express');
 var path = require('path');
-var logger = require(path.join(__dirname, 'utils', 'logger.js'));
+var logger = require(path.join(__dirname, 'src', 'utils', 'logger.js'));
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// var https = require('https');
-var http = require('http');
+var https = require('https');
 var fs = require('fs');
 
-var auth = require(path.join(__dirname, 'auth.js'));
+var auth = require(path.join(__dirname, 'src', 'auth.js'));
 
 // Routes
-var users = require(path.join(__dirname, 'routes','api','users'));
-var userRegister = require(path.join(__dirname, 'routes','api','userRegister'));
-var googleAuth = require(path.join(__dirname, 'routes','api','googleAuth'));
-var events = require(path.join(__dirname, 'routes','api','events'));
+var users = require(path.join(__dirname, 'src', 'routes','api','users.js'));
+var userRegister = require(path.join(__dirname, 'src', 'routes','api','userRegister'));
+var googleAuth = require(path.join(__dirname, 'src', 'routes','api','googleAuth'));
+var events = require(path.join(__dirname, 'src', 'routes','api','events'));
 
 
 var mongoose = require('mongoose');
-var config = require(path.join(__dirname, 'config', 'config.js'));
+var config = require(path.join(__dirname, 'src', 'config', 'config.js'));
 var app = express();
 
 mongoose.connect(config.get('db.protocol') + '://' +
@@ -41,7 +40,6 @@ mongoose.connection.on('open', function() {
     }));
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
-
 
 
     // Unauthenticated middleware
@@ -85,12 +83,12 @@ mongoose.connection.on('open', function() {
      * Create HTTPS server
      */
     var options = {
-        // key  : fs.readFileSync('ssl/key.pem'),
-        // ca   : fs.readFileSync('ssl/csr.pem'),
-        // cert : fs.readFileSync('ssl/cert.pem')
+        key  : fs.readFileSync('ssl/key.pem'),
+        ca   : fs.readFileSync('ssl/csr.pem'),
+        cert : fs.readFileSync('ssl/cert.pem')
     };
-    // var server = http.createServer(options, app);
-    app.listen(config.get('server.port'));
+    var server = https.createServer(options, app);
+    server.listen(config.get('server.port'));
 
 
     logger.info('Application running on: ' + config.get('server.port'));

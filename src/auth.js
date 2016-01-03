@@ -1,8 +1,4 @@
-/**
- * Author: szymon
- * Creation date: 20.11.15
- * Project: droppr
- */
+/* jshint node: true */
 
 var auth = require('basic-auth');
 var path = require('path');
@@ -13,7 +9,7 @@ function returnUnauthorised(res) {
     console.log("returning 401");
     res.set('WWW-Authenticate', 'Basic realm="example"');
     return res.status(401).send({msg: 'Authenticate with a valid username and hashed password'});
-};
+}
 
 module.exports = function(req, res, next) {
     console.log("Beginning authorisation.");
