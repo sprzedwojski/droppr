@@ -39,8 +39,12 @@ router.post('/', function(req, res, next) {
         var user = new UserModel();
         user.name = name;
         user.surname = surname;
-        user.email = email;
-        user.passwordHash = pass;
+        user.authentications = {
+            local:{
+                email: email,
+                password: pass
+            }
+        };
         user.save(function(err, doc) {
             if(err) {
                 logger.error("Error saving user to db. Possibly required fields missing.");

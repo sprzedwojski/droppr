@@ -13,8 +13,8 @@ var fs = require('fs');
 var auth = require(path.join(__dirname, 'src', 'auth.js'));
 
 // Routes
-var users = require(path.join(__dirname, 'src', 'routes','api','users.js'));
-var userRegister = require(path.join(__dirname, 'src', 'routes','api','userRegister'));
+var users = require(path.join(__dirname, 'src', 'routes','api','users'));
+var userRegister = require(path.join(__dirname, 'src', 'routes','api','userRegister.js'));
 var googleAuth = require(path.join(__dirname, 'src', 'routes','api','googleAuth'));
 var events = require(path.join(__dirname, 'src', 'routes','api','events'));
 
@@ -46,7 +46,7 @@ mongoose.connection.on('open', function() {
     app.use('/api', googleAuth);
     app.use('/api/users', userRegister);
 
-    app.use(auth);
+    // app.use(auth);
 
     // Authenticated middleware
     app.use('/api/users', users);
