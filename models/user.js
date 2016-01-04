@@ -21,10 +21,16 @@ var UserSchema = new Schema({
 		type: String,
 		required: true
 	},
-	passwordHash: {
-		type: String,
-		required: true
-	}
+    authentications: {
+        local: {
+            email: String,
+            password: String
+        },
+        google: {
+            email: String,
+            userId: String
+        }
+    }
 });
 
 UserSchema.plugin(timestamps);
