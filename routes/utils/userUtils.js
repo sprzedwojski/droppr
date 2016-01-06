@@ -12,14 +12,29 @@ registerUser = function(name, surname, email, pass, callback) {
             return callback(err);
         }
 
+        var user;
+
         if(doc) {
-            logger.error("User email already taken.");
-            return callback(null, null);
+            // Found user with this email.
+            // Checking whether this user was previously authenticated with password or with Google.
+            //  If with Google, then adding password credentials and returning the user.
+            //  If with password, then error: email-password user already exists.
+
+            if(doc.authentications.local && doc.authentications.local.password) {
+                var msg = "User already exists. User email: " + doc.authentications.local.email;
+                logger.info(msg);
+                return callback(msg, doc);
+            }
+
+            if(doc.authentications.google && doc.authentications.google.userId) {
+                user = doc;
+            }
+        } else {
+            user = new UserModel();
+            user.name = name;
+            user.surname = surname;
         }
 
-        var user = new UserModel();
-        user.name = name;
-        user.surname = surname;
         user.email = email;
         user.authentications.local.email = email;
         user.authentications.local.password = pass;
@@ -31,7 +46,7 @@ registerUser = function(name, surname, email, pass, callback) {
             }
 
             // Returning the created user
-            logger.debug("New user created: " + doc);
+            logger.debug("Saved user: " + doc);
             return callback(null, doc);
         });
 
@@ -40,8 +55,8 @@ registerUser = function(name, surname, email, pass, callback) {
 
 
 registerGoogleUser = function(name, surname, token, callback) {
-
-    googleAuthUtils.authenticate(token, config.get('auth.test_client_id'), function(err, login) {
+    
+    googleAuthUtils.authenticate(token, config.get('auth.node_dev_client_id'), function(err, login) {
         if(err) {
             return callback(err);
         }
@@ -66,7 +81,7 @@ registerGoogleUser = function(name, surname, token, callback) {
                 if(doc.authentications.google && doc.authentications.google.userId) {
                     var msg = "Google user already exists. Google userID: " + doc.authentications.google.userId;
                     logger.info(msg);
-                    return callback(msg);
+                    return callback(msg, doc);
                 }
 
                 if(doc.authentications.local && doc.authentications.local.password) {

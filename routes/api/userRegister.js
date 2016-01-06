@@ -28,14 +28,17 @@ router.post('/', function(req,res,next) {
             .json({msg:"Wrong authentication method provided. Must be one of the following: [" + authMethods + "]"});
     }
 
+    // TODO Maybe refactor this in the future
     if(req.body.authMethod == "google") {
         userUtils.registerGoogleUser(req.body.name, req.body.surname, req.body.token, function (err, user) {
             if (err) {
-                return next(err);
+                if(!user) {
+                    return next(err);
+                }
+
+                // Existing user found
+                return res.status(302).send(user);
             }
-/*            if (user === null) {
-                return res.status(401).json({msg: "User email already taken."});
-            }*/
 
             return res.status(201).send(user);
         });
