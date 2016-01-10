@@ -24,39 +24,37 @@ router.post('/', function(req,res,next) {
 
     // Check if the authentication method is specified
     if(authMethods.indexOf(req.body.authMethod) < 0) {
-        return res.status(400)
+        return res.status(statusCodes.BAD_REQUEST)
             .json({msg:"Wrong authentication method provided. Must be one of the following: [" + authMethods + "]"});
     }
 
-    // TODO Maybe refactor this in the future
+    var callbackHandler = new CallbackHandler(req, res, next);
+
     if(req.body.authMethod == "google") {
-        userUtils.registerGoogleUser(req.body.name, req.body.surname, req.body.token, function (err, user) {
-            if (err) {
-                if(!user) {
-                    return next(err);
-                }
-
-                // Existing user found
-                return res.status(302).send(user);
-            }
-
-            // Returning the created user
-            logger.debug("New user created: " + doc);
-            return res.status(statusCodes.CREATED).json(user);
-        });
+        userUtils.registerGoogleUser(req, res, callbackHandler.userRegistrationCallback);
     } else {
-        userUtils.registerUser(req.body.name, req.body.surname, req.body.email, req.body.passwordHash, function (err, user) {
-            if (err) {
-                return next(err);
-            }
-            if (user === null) {
-                return res.status(401).json({msg: "User email already taken."});
-            }
-
-            return res.status(201).send(user);
-        });
+        userUtils.registerUser(req, res, callbackHandler.userRegistrationCallback);
     }
 
 });
+
+var CallbackHandler = function(req, res, next) {
+
+    this.userRegistrationCallback = function (err, user) {
+        if (err) {
+            if(!user) {
+                return next(err);
+            }
+
+            // Existing user found
+            return res.status(302).json(user); // The Http codes library doesn't have 302 Found...
+        }
+
+        // Returning the created user
+        logger.debug("New user created: " + user);
+        return res.status(statusCodes.CREATED).json(user);
+    };
+
+};
 
 module.exports = router;

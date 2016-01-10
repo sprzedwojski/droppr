@@ -44,7 +44,7 @@ module.exports = function(req, res, next) {
 
             var token = authUser.pass;
 
-            googleAuthUtils.authenticate(token, config.get('auth.node_dev_client_id'), function(err, login) {
+            googleAuthUtils.authenticate(token, config.get('auth.client_id'), function(err, login) {
                 if(err) {
                     return next(err);
                 }

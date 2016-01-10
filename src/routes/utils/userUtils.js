@@ -4,7 +4,12 @@ var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
 var config = require(path.join(__dirname, '..', '..', 'config', 'config.js'));
 var googleAuthUtils = require(path.join(__dirname, '..', 'utils', 'googleAuthUtils.js'));
 
-registerUser = function(name, surname, email, pass, callback) {
+registerUser = function(req, res, callback) {
+
+    var name = req.body.name;
+    var surname = req.body.surname;
+    var email = req.body.email;
+    var pass = req.body.passwordHash;
 
     UserModel.findOne({email:email}, function(err, doc) {
         if(err) {
@@ -54,9 +59,13 @@ registerUser = function(name, surname, email, pass, callback) {
 };
 
 
-registerGoogleUser = function(name, surname, token, callback) {
-    
-    googleAuthUtils.authenticate(token, config.get('auth.node_dev_client_id'), function(err, login) {
+registerGoogleUser = function(req, res, callback) {
+
+    var name = req.body.name;
+    var surname = req.body.surname;
+    var token = req.body.token;
+
+    googleAuthUtils.authenticate(token, config.get('auth.client_id'), function(err, login) {
         if(err) {
             return callback(err);
         }
