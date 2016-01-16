@@ -3,6 +3,9 @@
 var auth = require('basic-auth');
 var path = require('path');
 var UserModel = require(path.join(__dirname, 'models', 'user.js'));
+var logger = require(path.join(__dirname, 'utils', 'logger.js'));
+var config = require(path.join(__dirname, 'config', 'config.js'));
+var googleAuthUtils = require(path.join(__dirname, 'routes', 'utils', 'googleAuthUtils.js'));
 
 
 function returnUnauthorised(res) {
@@ -12,45 +15,55 @@ function returnUnauthorised(res) {
 }
 
 module.exports = function(req, res, next) {
-    console.log("Beginning authorisation.");
+    logger.debug("*** Beginning authorisation. ***");
 
     var authUser = auth(req);
     if(!authUser) {
-        console.log(">> no user in the header");
+        logger.error("No user in the header.");
         return returnUnauthorised(res);
     }
 
-    console.log("carrying on...");
-
     UserModel.findOne({email:authUser.name}, function(err, doc){
-        console.log("finished searching for user");
 
         if(err) {
-            //TODO
-            console.log("authentication error");
+            logger.error("Authentication error [email: " + authUser.name + "]");
             return returnUnauthorised(res);
         }
 
         if(doc === null || doc.length === 0) {
-            // TODO
-            // brak usera
-            console.log("no user found");
+            logger.warn("No user found in the database [email: " + authUser.name + "]");
             return returnUnauthorised(res);
         }
 
-        console.log("doc: " + doc);
-        console.log(doc.email);
-        console.log(">> password from db: " + doc.passwordHash);
+        // FIXME
+        // Arbitrarily setting password max length to 20 -> if longer, we assume it is a Google token
+        // Prone to errors, to be corrected in the future
+        // POC Google
+        if(authUser.pass.length > 20) {
+            // Google sign-in path
 
-        if(doc.passwordHash == authUser.pass) {
-            console.log("user authorised");
-            return next();
+            var token = authUser.pass;
+
+            googleAuthUtils.authenticate(token, config.get('auth.client_id'), function(err, login) {
+                if(err) {
+                    return next(err);
+                }
+
+                logger.info("Google user authorised [email: " + doc.email + "]");
+                return next();
+            });
         } else {
-            // TODO
-            // złe hasło
-            console.log("wrong password");
-            return returnUnauthorised(res);
+            // Email-password path
+
+            if(doc.authentications.local.password == authUser.pass) {
+                logger.info("User authorised [email: " + doc.email + "]");
+                return next();
+            } else {
+                logger.error("Wrong password.");
+                return returnUnauthorised(res);
+            }
         }
+
     });
 
 };

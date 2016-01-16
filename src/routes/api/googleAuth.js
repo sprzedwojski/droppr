@@ -15,11 +15,7 @@ var config = require(path.join(__dirname, '..', '..', 'config', 'config.js'));
 var googleAuthUtils = require(path.join(__dirname, '..', 'utils', 'googleAuthUtils.js'));
 var statusCodes = require('http-status-codes');
 
-// "Node DEV" in Google Developer Console
-var NODE_DEV_CLIENT_ID = config.get('auth.node_dev_client_id');
-
-// OAuth 2.0 Playground
-var TEST_CLIENT_ID = config.get('auth.test_client_id');
+var CLIENT_ID = config.get('auth.client_id');
 
 
 var postTokenSignIn = function(req,res,next) {
@@ -28,7 +24,7 @@ var postTokenSignIn = function(req,res,next) {
         return next("Token is missing from request parameters.");
     }
 
-    googleAuthUtils.authenticate(token, NODE_DEV_CLIENT_ID, function(err, login) {
+    googleAuthUtils.authenticate(token, CLIENT_ID, function(err, login) {
         if(err) {
             return next(err);
         }
@@ -40,30 +36,7 @@ var postTokenSignIn = function(req,res,next) {
     });
 };
 
-
-var postTokenSignInTest = function(req,res,next) {
-    var token = req.body.token;
-    if(!token) {
-        return next("Token is missing from request parameters.");
-    }
-
-    googleAuthUtils.authenticate(token, TEST_CLIENT_ID, function(err, login) {
-        if(err) {
-            return next(err);
-        }
-
-        logger.info("Ending tokensignin test");
-
-        res.status(statusCodes.OK).json({msg: "Authenticated", "login": login.getPayload()});
-    });
-};
-
-
-
-
-
 router.post('/tokensignin', postTokenSignIn);
-router.post('/tokensigninTest', postTokenSignInTest);
 
 module.exports = router;
 

@@ -46,7 +46,7 @@ mongoose.connection.on('open', function() {
     app.use('/api', googleAuth);
     app.use('/api/users', userRegister);
 
-    // app.use(auth);
+    app.use(auth);
 
     // Authenticated middleware
     app.use('/api/users', users);
@@ -94,8 +94,5 @@ mongoose.connection.on('open', function() {
     logger.info('Application running on: ' + config.get('server.port'));
     logger.info('Run mode: ' + app.get('env'));
 });
-
-
-// TEST COMMENT TM-10
 
 module.exports = app;
