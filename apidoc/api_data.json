@@ -1,0 +1,698 @@
+[
+  {
+    "type": "post",
+    "url": "/api/event",
+    "title": "Create a new event.",
+    "name": "addEvent",
+    "group": "Event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Event name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "eventType",
+            "description": "<p>Type of event (sport).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "lat",
+            "description": "<p>Latitude of the event coords.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "lng",
+            "description": "<p>Longitude of the event coords.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "eventTime",
+            "description": "<p>Time of the event.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "host",
+            "description": "<p>ID of the user hosting the event.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "guests",
+            "description": "<p>IDs of event registered guests.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "minParticipants",
+            "description": "<p>Minimum number of participants required for the event.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "maxParticipants",
+            "description": "<p>Minimum number of participants required for the event.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Event created</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "post",
+    "url": "/api/event/:id/users",
+    "title": "Add a user to an existing event",
+    "name": "addParticipantToEvent",
+    "group": "Event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>ID of the event to add to</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID of the user to add</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Event modified</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Invalid request data</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>User/event not found</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "get",
+    "url": "/api/event/:id",
+    "title": "Get event by ID",
+    "name": "getEventById",
+    "group": "Event",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "event",
+            "description": "<p>Event object.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "get",
+    "url": "/api/event/:id/participants",
+    "title": "Get event participants",
+    "name": "getEventParticipants",
+    "group": "Event",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "participants",
+            "description": "<p>List of user objects participating in the event (host + guests)</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "get",
+    "url": "/api/event",
+    "title": "Get all existing events",
+    "name": "getEvents",
+    "group": "Event",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Object[]",
+            "optional": false,
+            "field": "events",
+            "description": "<p>List of events.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "get",
+    "url": "/api/event/types",
+    "title": "Get all existing event types",
+    "name": "getEvents",
+    "group": "Event",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "eventTypeList",
+            "description": "<p>List of all existing events.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "post",
+    "url": "/api/event/:id",
+    "title": "Modify an existing event.",
+    "name": "modifyEvent",
+    "group": "Event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>Event name.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "eventType",
+            "description": "<p>Type of event (sport).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "lat",
+            "description": "<p>Latitude of the event coords.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "lng",
+            "description": "<p>Longitude of the event coords.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": true,
+            "field": "eventTime",
+            "description": "<p>Time of the event.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "host",
+            "description": "<p>ID] of the user hosting the event.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "guests",
+            "description": "<p>IDs of event registered guests.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "minParticipants",
+            "description": "<p>Minimum number of participants required for the event.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "maxParticipants",
+            "description": "<p>Minimum number of participants required for the event.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Event modified</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "post",
+    "url": "/api/event/:id/users/:userId",
+    "title": "Add a user to an existing event",
+    "name": "removeParticipantFromEvent",
+    "group": "Event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "id",
+            "description": "<p>ID of the event to remove from</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "_id",
+            "description": "<p>ID of the user to remove</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Event modified</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Invalid request data</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>User/event not found</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/events.js",
+    "groupTitle": "Event"
+  },
+  {
+    "type": "post",
+    "url": "/api/tokensignin",
+    "title": "Authenticate with the Google API token",
+    "name": "postTokenSignIn",
+    "group": "Google",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Google auth. token to authenticate with.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Authentication successful</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/googleAuth.js",
+    "groupTitle": "Google"
+  },
+  {
+    "type": "get",
+    "url": "/api/user/:id",
+    "title": "Request user information",
+    "name": "getUserById",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>User's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "name",
+            "description": "<p>Firstname of the User.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "surname",
+            "description": "<p>Lastname of the User.</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email of the User.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/users.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/api/user",
+    "title": "Register new user",
+    "name": "userRegister",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "enum",
+            "optional": false,
+            "field": "authMethod",
+            "description": "<p>User's authentication method</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "email",
+            "description": "<p>User's email</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "name",
+            "description": "<p>User's name</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "surname",
+            "description": "<p>User's surname</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": true,
+            "field": "token",
+            "description": "<p>User's google token</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>User created</p>"
+          }
+        ],
+        "302": [
+          {
+            "group": "302",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>User already exists</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Incorrect data provided</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "msg",
+            "description": "<p>Internal server error</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/routes/api/userRegister.js",
+    "groupTitle": "User"
+  }
+]

@@ -1,0 +1,15 @@
+{
+  "name": "Team Mates REST-ful API docs",
+  "version": "0.1.0",
+  "description": "This API provides endpoint definitions for Team Mates backend",
+  "title": "Team Mates Docs",
+  "url": "",
+  "sampleUrl": false,
+  "apidoc": "0.2.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2016-01-19T12:44:39.003Z",
+    "url": "http://apidocjs.com",
+    "version": "0.14.0"
+  }
+}

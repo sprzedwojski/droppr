@@ -2,8 +2,12 @@
   "name": "droppr",
   "version": "0.0.0",
   "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
+  "apidoc" : {
+    "name": "Team Mates REST-ful API docs",
+    "version": "0.1.0",
+    "description": "This API provides endpoint definitions for Team Mates backend",
+    "title": "Team Mates Docs",
+    "url": ""
   },
   "dependencies": {
     "async": "1.5.0",
