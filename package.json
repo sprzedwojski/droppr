@@ -2,7 +2,7 @@
   "name": "droppr",
   "version": "0.0.0",
   "private": true,
-  "apidoc" : {
+  "apidoc": {
     "name": "Team Mates REST-ful API docs",
     "version": "0.1.0",
     "description": "This API provides endpoint definitions for Team Mates backend",
@@ -23,6 +23,7 @@
     "mongoose-timestamp": "~0.4.0",
     "morgan": "~1.6.1",
     "nconf": "~0.8.2",
-    "winston": "~2.1.1"
+    "winston": "~2.1.1",
+    "lodash": "~4.0.0"
   }
 }

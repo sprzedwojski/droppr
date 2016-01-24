@@ -2,6 +2,51 @@ var path = require('path');
 var EventModel = require(path.join(__dirname, '..', '..', 'models', 'event.js'));
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
 var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
+var validator = require(path.join(__dirname, '..', '..', 'utils', 'validator.js'));
+var queryParamUtils = require(path.join(__dirname, '..', '..', 'utils', 'queryParamUtils.js'));
+var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 'eventTypeList.js'));
+var errorCodes = require(path.join(__dirname, '..', '..', '..', 'errorCodes.js'));
+
+module.exports.createEventFilterDataHolder = function(req, callback) {
+    var data = {};
+    if (validator.isValid(req.query.eventType)) {
+        if (eventTypeList.indexOf(req.query.eventType) < 0) {
+            return callback(errorCodes.invalidEventType);
+        }
+        data.eventType = req.query.eventType;
+    }
+    if (validator.isValid(req.query.name)) {
+        data.name = new RegExp(req.query.name, "i");
+    }
+    if (validator.isValid(req.query.guestCount)) {
+        if (isNaN(req.query.guestCount)) {
+            return callback(errorCodes.invalidGuestCountFormat);
+        }
+        data.guests = {
+            $size: req.query.guestCount
+        };
+    }
+    if (validator.isValid(req.query.numParticipants)) {
+        if (isNaN(req.query.numParticipants)) {
+            return callback(errorCodes.invalidNumParticipantsFormat);
+        }
+        data.minParticipants = {
+            $lte: req.query.numParticipants
+        };
+        data.maxParticipants = {
+            $gte: req.query.numParticipants
+        };
+    }
+    if (validator.isValid(req.query.timeFrom) || validator.isValid(req.query.timeTo)) {
+        if (!validator.isDateTimeRangeValid(req.query.timeFrom, req.query.timeTo)) {
+            return callback(errorCodes.invalidDates);
+        }
+        data.eventTime = queryParamUtils.handleTimeFrameQueryParam(req);
+    }
+
+    return callback(null, data);
+};
+
 
 module.exports.buildGetParticipantsJSON = function(doc) {
     var participants = doc.guests;
@@ -20,13 +65,13 @@ module.exports.parsePostEventFields = function(req) {
     event.lng = req.body.lng;
     event.eventTime = req.body.eventTime;
     event.host = req.body.host;
-    if (req.body.guests !== undefined) {
+    if (validator.isValid(req.body.guests)) {
         event.guests = JSON.parse(req.body.guests).concat();
     }
-    if (req.body.minParticipants !== undefined) {
+    if (validator.isValid(req.body.minParticipants)) {
         event.minParticipants = req.body.minParticipants;
     }
-    if (req.body.maxParticipants !== undefined) {
+    if (validator.isValid(req.body.maxParticipants)) {
         event.maxParticipants = req.body.maxParticipants;
     }
     return event;
@@ -51,31 +96,31 @@ module.exports.checkEventExists = function(req, res, next, callback) {
 
 module.exports.buildPutEventSet = function(req) {
     var set = {};
-    if (req.body.name !== undefined) {
+    if (validator.isValid(req.body.name)) {
         set.name = req.body.name;
     }
-    if (req.body.eventType !== undefined) {
+    if (validator.isValid(req.body.eventType)) {
         set.eventType = req.body.eventType;
     }
-    if (req.body.lat !== undefined) {
-        set.lat = req.body.lat;       
+    if (validator.isValid(req.body.lat)) {
+        set.lat = req.body.lat;
     }
-    if (req.body.lng !== undefined) {
-        set.lng = req.body.lng;       
+    if (validator.isValid(req.body.lng)) {
+        set.lng = req.body.lng;
     }
-    if (req.body.eventTime !== undefined) {
+    if (validator.isValid(req.body.eventTime)) {
         set.eventTime = req.body.eventTime;
     }
-    if (req.body.host !== undefined) {
+    if (validator.isValid(req.body.host)) {
         set.host = req.body.host;
     }
-    if (req.body.guests !== undefined) {
+    if (validator.isValid(req.body.guests)) {
         set.guests = JSON.parse(req.body.guests).concat();
     }
-    if (req.body.minParticipants !== undefined) {
+    if (validator.isValid(req.body.minParticipants)) {
         set.minParticipants = req.body.minParticipants;
     }
-    if (req.body.maxParticipants !== undefined) {
+    if (validator.isValid(req.body.maxParticipants)) {
         set.maxParticipants = req.body.maxParticipants;
     }
     return set;

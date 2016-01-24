@@ -1,4 +1,4 @@
-/* jshint node: true */
+
 var mongoose = require('mongoose');
 var timestamps = require('mongoose-timestamp');
 mongoose.set('debug', true);

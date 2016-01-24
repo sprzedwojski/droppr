@@ -7,10 +7,10 @@ var eventTypeList = require(path.join(__dirname, '..', '..', 'models', 'enums', 
 var async = require('async');
 var eventUtils = require(path.join(__dirname, '..', 'utils', 'eventUtils.js'));
 var statusCodes = require('http-status-codes');
-
+var errorHelper = require(path.join(__dirname, '..', '..', 'utils', 'errorHelper.js')).errorHelper;
 
 /**
- * @api {get} /api/event Get all existing events
+ * @api {get} /api/event Get all existing events for a given set of filter params
  * @apiName getEvents
  * @apiGroup Event
  *
@@ -19,13 +19,19 @@ var statusCodes = require('http-status-codes');
  * @apiError (500) {String} msg Internal server error
  */
 router.get('/', function(req, res, next) {
-    EventModel.find({}, function(err, events) {
+    eventUtils.createEventFilterDataHolder(req, function(err, data) {
         if (err) {
-            logger.error("Error fetching all events.");
-            return next(err);
+            return next(errorHelper(err));
         }
-        logger.info(events.length + " events found.");
-        return res.status(statusCodes.OK).send(events);
+        var query = data;
+        EventModel.find(query, function(err, events) {
+            if (err) {
+                logger.error("Error fetching all events.");
+                return next(err);
+            }
+            logger.info(events.length + " events found.");
+            return res.status(statusCodes.OK).send(events);
+        });
     });
 });
 
@@ -86,8 +92,6 @@ router.get('/:id/participants', function(req, res, next) {
 
 
 
-
-
 /**
  * @api {post} /api/event Create a new event.
  * @apiName addEvent
@@ -121,8 +125,6 @@ router.post('/', function(req, res, next) {
     });
 
 });
-
-
 
 
 
@@ -190,7 +192,7 @@ router.put('/:id/users', function(req, res, next) {
 
     logger.info("userId: " + userId);
 
-    if(userId === null) {
+    if (userId === null) {
         logger.error("User ID is null.");
         return res.status(statusCodes.BAD_REQUEST).json({
             msg: "User ID is missing"
@@ -217,8 +219,6 @@ router.put('/:id/users', function(req, res, next) {
 
 
 
-
-
 /**
  * @api {post} /api/event/:id/users/:userId Add a user to an existing event
  * @apiName removeParticipantFromEvent
@@ -234,8 +234,14 @@ router.put('/:id/users', function(req, res, next) {
  * @apiError (500) {String} msg Internal server error
  */
 router.put('/:id/users/:userId', function(req, res, next) {
-    eventUtils.checkEventExists(req, res, next, function(req, res, next){
-        EventModel.update({_id: req.params.id}, {$pull: {guests: req.params.userId}}, function(err){
+    eventUtils.checkEventExists(req, res, next, function(req, res, next) {
+        EventModel.update({
+            _id: req.params.id
+        }, {
+            $pull: {
+                guests: req.params.userId
+            }
+        }, function(err) {
             if (err) {
                 return next(err);
             }
@@ -248,4 +254,3 @@ router.put('/:id/users/:userId', function(req, res, next) {
 
 
 module.exports = router;
-

@@ -1,8 +1,6 @@
 var _ = require('lodash');
 var path = require('path');
-var errorCodes = require(path.join(__dirname, '..', '..', 'errorCodes.js'));
 var logger = require(path.join(__dirname, 'logger.js'));
-var arrayUtils = require(path.join(__dirname, 'arrayUtils.js'));
 
 var isValid = module.exports.isValid = function(input) {
 	var result = !_.isNull(input) && !_.isUndefined(input);
@@ -45,8 +43,8 @@ var isValidId = module.exports.isValidId = function(id) {
 	}
 };
 
-var isDateTimeRangeValid = module.exports.isDateTimeRangeInvalid = function(date1, date2) {
-	if (isValid(date1) || isValid(date2)) {
+var isDateTimeRangeValid = module.exports.isDateTimeRangeValid = function(date1, date2) {
+	if (!isValid(date1) || !isValid(date2)) {
 		logger.error('One of the specified dates is null or undefined');
 		return false;
 	}
