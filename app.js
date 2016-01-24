@@ -6,6 +6,7 @@ var path = require('path');
 var logger = require(path.join(__dirname, 'src', 'utils', 'logger.js'));
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var statusCodes = require('http-status-codes');
 
 var https = require('https');
 var fs = require('fs');
@@ -61,10 +62,17 @@ mongoose.connection.on('open', function() {
     if (app.get('env') === 'development') {
         app.use(function(err, req, res, next) {
              //TODO 
-            console.log(err);
-            res.status(err.status || 500).json({
-                msg: err.toString()
-            });
+            logger.error(err);
+            if (err !== undefined && err.status !== undefined && err !== null && err.status !== null) {
+                res.status(err.status).json({
+                    errors: err
+                });
+            } else {
+                res.status(statusCodes.INTERNAL_SERVER_ERROR).json({
+                    errors: 'The submitted request had an error, check your data.',
+                    note: 'Missing error handler for this usecase'
+                });
+            }
         });
     }
 
@@ -72,8 +80,8 @@ mongoose.connection.on('open', function() {
     // no stacktraces leaked to user
     app.use(function(err, req, res, next) {
          //TODO 
-        console.log(err);
-        res.status(err.status || 500).json({
+        logger.error(err);
+        res.status(err.status || statusCodes.INTERNAL_SERVER_ERROR).json({
             msg: err.toString()
         });
     });
