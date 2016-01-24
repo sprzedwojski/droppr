@@ -1,6 +1,3 @@
-/* jshint node: true */
-
-// External modules
 var express = require('express');
 var path = require('path');
 var logger = require(path.join(__dirname, 'src', 'utils', 'logger.js'));
@@ -13,7 +10,6 @@ var fs = require('fs');
 
 var auth = require(path.join(__dirname, 'src', 'auth.js'));
 
-// Routes
 var users = require(path.join(__dirname, 'src', 'routes','api','users'));
 var userRegister = require(path.join(__dirname, 'src', 'routes','api','userRegister.js'));
 var googleAuth = require(path.join(__dirname, 'src', 'routes','api','googleAuth'));

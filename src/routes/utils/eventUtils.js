@@ -1,5 +1,3 @@
-/* jshint node: true */
-
 var path = require('path');
 var EventModel = require(path.join(__dirname, '..', '..', 'models', 'event.js'));
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));

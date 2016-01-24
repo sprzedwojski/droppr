@@ -1,4 +1,3 @@
-/* jshint node: true */
 var path = require('path');
 var express = require('express');
 var router = express.Router();

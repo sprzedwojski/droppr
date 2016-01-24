@@ -1,4 +1,3 @@
-/* jshint node: true */
 module.exports = [
 	"Piłka nożna",
 	"Tenis",

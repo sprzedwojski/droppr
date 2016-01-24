@@ -4,7 +4,7 @@ var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
 var config = require(path.join(__dirname, '..', '..', 'config', 'config.js'));
 var googleAuthUtils = require(path.join(__dirname, '..', 'utils', 'googleAuthUtils.js'));
 
-registerUser = function(req, res, callback) {
+var registerUser = module.exports.registerUser = function(req, res, callback) {
 
     var name = req.body.name;
     var surname = req.body.surname;
@@ -59,7 +59,7 @@ registerUser = function(req, res, callback) {
 };
 
 
-registerGoogleUser = function(req, res, callback) {
+var registerGoogleUser = module.exports.registerGoogleUser  = function(req, res, callback) {
 
     var name = req.body.name;
     var surname = req.body.surname;
@@ -121,7 +121,3 @@ registerGoogleUser = function(req, res, callback) {
 
     });
 };
-
-
-module.exports.registerUser = registerUser;
-module.exports.registerGoogleUser = registerGoogleUser;

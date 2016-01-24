@@ -1,11 +1,3 @@
-/* jshint node: true */
-
-/**
- * Author: szymon
- * Creation date: 20.11.15
- * Project: droppr
- */
-
 var path = require('path');
 var express = require('express');
 var router = express.Router();
@@ -60,7 +52,7 @@ var CallbackHandler = function(req, res, next) {
                 return next(err);
             }
             // Existing user found
-            return res.status(statusCodes.MOVED_TEMPORARILY).json(user); // The Http codes library doesn't have 302 Found...
+            return res.status(statusCodes.MOVED_TEMPORARILY).json(user);
         }
         // Returning the created user
         logger.debug("New user created: " + user);

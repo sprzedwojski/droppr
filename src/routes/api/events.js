@@ -1,11 +1,3 @@
-/* jshint node: true */
-
-/**
- * Author: szymon
- * Creation date: 20.11.15
- * Project: droppr
- */
-
 var express = require('express');
 var router = express.Router();
 var path = require('path');
@@ -16,7 +8,6 @@ var async = require('async');
 var eventUtils = require(path.join(__dirname, '..', 'utils', 'eventUtils.js'));
 var statusCodes = require('http-status-codes');
 
-// GET ==========================================
 
 /**
  * @api {get} /api/event Get all existing events

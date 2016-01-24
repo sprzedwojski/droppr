@@ -1,12 +1,3 @@
-/* jshint node: true */
-
-
-/**
- * Author: szymon
- * Creation date: 06.12.15
- * Project: droppr
- */
-
 var express = require('express');
 var router = express.Router();
 var path = require('path');
@@ -17,20 +8,6 @@ var statusCodes = require('http-status-codes');
 
 var CLIENT_ID = config.get('auth.client_id');
 
-
-var postTokenSignIn = function(req,res,next) {
-    var token = req.body.token;
-    if(!token) {
-        return next("Token is missing from request parameters.");
-    }
-    googleAuthUtils.authenticate(token, CLIENT_ID, function(err, login) {
-        if(err) {
-            return next(err);
-        }
-        logger.info("Ending tokensignin");
-        res.status(statusCodes.OK).json({msg: "Authenticated", "login": login.getPayload()});
-    });
-};
 
 
 /**
@@ -44,7 +21,21 @@ var postTokenSignIn = function(req,res,next) {
  * @apiSuccess (200) {String} msg Authentication successful
  * @apiError (500) {String} msg Internal server error
  */
-router.post('/tokensignin', postTokenSignIn);
+router.post('/tokensignin', function(req,res,next) {
+    var token = req.body.token;
+    if(!token) {
+        return next("Token is missing from request parameters.");
+    }
+    googleAuthUtils.authenticate(token, CLIENT_ID, function(err, login) {
+        if(err) {
+            return next(err);
+        }
+        logger.info("Ending tokensignin");
+        res.status(statusCodes.OK).json({msg: "Authenticated", "login": login.getPayload()});
+    });
+});
+
+
 
 module.exports = router;
 

@@ -1,5 +1,3 @@
-/* jshint node: true */
-
 var auth = require('basic-auth');
 var path = require('path');
 var UserModel = require(path.join(__dirname, 'models', 'user.js'));

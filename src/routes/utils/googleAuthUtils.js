@@ -1,5 +1,3 @@
-/* jshint node: true */
-
 var path = require('path');
 var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
 

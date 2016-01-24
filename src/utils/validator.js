@@ -1,4 +1,3 @@
-/* jshint node: true */
 var _ = require('lodash');
 var path = require('path');
 var errorCodes = require(path.join(__dirname, '..', '..', 'errorCodes.js'));
@@ -8,9 +7,9 @@ var arrayUtils = require(path.join(__dirname, 'arrayUtils.js'));
 var isValid = module.exports.isValid = function(input) {
 	var result = !_.isNull(input) && !_.isUndefined(input);
 	if (input instanceof Array) {
-		result = result | && !_.isEmpty(input);
+		result = result  && !_.isEmpty(input);
 	}
-	return result;b
+	return result;
 };
 
 var isValidNaturalNumber = module.exports.isValidNaturalNumber = function(value) {
@@ -31,12 +30,12 @@ var isInRange = module.exports.isInRange = function(value, min, max) {
 };
 
 var isValidId = module.exports.isValidId = function(id) {
-	if (isInvalid(id)) {
+	if (!isValid(id)) {
 		return false;
 	}
 	try {
 		var value = id.match(/^[0-9a-fA-F]{24}$/);
-		if (isInvalid(value)) {
+		if (isValid(value)) {
 			return false;
 		} else {
 			return true;
@@ -47,7 +46,7 @@ var isValidId = module.exports.isValidId = function(id) {
 };
 
 var isDateTimeRangeValid = module.exports.isDateTimeRangeInvalid = function(date1, date2) {
-	if (isInvalid(date1) || isInvalid(date2)) {
+	if (isValid(date1) || isValid(date2)) {
 		logger.error('One of the specified dates is null or undefined');
 		return false;
 	}
