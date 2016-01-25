@@ -15,6 +15,12 @@ var errorHelper = require(path.join(__dirname, '..', '..', 'utils', 'errorHelper
  * @apiGroup Event
  *
  * @apiSuccess (200) {Object[]} events List of events.
+ * @apiParam {String} [name] Event name.
+ * @apiParam {String} [eventType]  Type of event (sport).
+ * @apiParam {Date} [eventTime]  Time of the event.
+ * @apiParam {String} [guestCount] Number of participants already registered.
+ * @apiParam {Number} [numParticipants]  Target number of participants (between min and max).
+ * 
  *
  * @apiError (500) {String} msg Internal server error
  */
