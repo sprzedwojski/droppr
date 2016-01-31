@@ -43,6 +43,16 @@ module.exports.createEventFilterDataHolder = function(req, callback) {
         }
         data.eventTime = queryParamUtils.handleTimeFrameQueryParam(req);
     }
+    if(validator.isValid(req.query.lat) && validator.isValid(req.query.lng) && validator.isValid(req.query.tolerance)){
+        data.lat = {
+            $gte: req.query.lat - req.query.tolerance,
+            $lte: req.query.lat + req.query.tolerance,
+        };
+        data.lng = {
+            $gte: req.query.lng - req.query.tolerance,
+            $lte: req.query.lng + req.query.tolerance,
+        };
+    }
 
     return callback(null, data);
 };

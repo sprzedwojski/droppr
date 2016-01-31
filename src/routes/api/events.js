@@ -20,7 +20,9 @@ var errorHelper = require(path.join(__dirname, '..', '..', 'utils', 'errorHelper
  * @apiParam {Date} [eventTime]  Time of the event.
  * @apiParam {String} [guestCount] Number of participants already registered.
  * @apiParam {Number} [numParticipants]  Target number of participants (between min and max).
- * 
+ * @apiParam {Number} [lat]  Latitude (always use with lng and tolerance).
+ * @apiParam {Number} [lng]  Longitude (always use with lat and tolerance).
+ * @apiParam {Number} [tolerance]  Coordinate range to look through (always use with lat and lng).
  *
  * @apiError (500) {String} msg Internal server error
  */
