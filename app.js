@@ -15,7 +15,7 @@ var userRegister = require(path.join(__dirname, 'src', 'routes','api','userRegis
 var googleAuth = require(path.join(__dirname, 'src', 'routes','api','googleAuth'));
 var events = require(path.join(__dirname, 'src', 'routes','api','events'));
 
-
+var routeValidator = require(path.join(__dirname, 'routeValidator.js'));
 var mongoose = require('mongoose');
 var config = require(path.join(__dirname, 'src', 'config', 'config.js'));
 var app = express();
@@ -38,6 +38,7 @@ mongoose.connection.on('open', function() {
     app.use(cookieParser());
     app.use(express.static(path.join(__dirname, 'public')));
 
+    routeValidator.validateRoutes(app);
 
     // Unauthenticated middleware
     app.use('/api', googleAuth);

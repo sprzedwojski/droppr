@@ -7,7 +7,7 @@ var googleAuthUtils = require(path.join(__dirname, 'routes', 'utils', 'googleAut
 
 
 function returnUnauthorised(res) {
-    console.log("returning 401");
+    logger.error("Returning 401");
     res.set('WWW-Authenticate', 'Basic realm="example"');
     return res.status(401).send({msg: 'Authenticate with a valid username and hashed password'});
 }
@@ -16,6 +16,7 @@ module.exports = function(req, res, next) {
     logger.debug("*** Beginning authorisation. ***");
 
     var authUser = auth(req);
+    console.log(authUser);
     if(!authUser) {
         logger.error("No user in the header.");
         return returnUnauthorised(res);

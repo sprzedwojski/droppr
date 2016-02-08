@@ -30,7 +30,7 @@ var UserSchema = new Schema({
             userId: String
         }
     },
-    birthday: {
+    birthdate: {
 		type: Date,
 		required: false
 	},

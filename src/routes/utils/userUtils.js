@@ -1,8 +1,9 @@
 var path = require('path');
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
-var logger = require(path.join(__dirname, '..', '..','utils', 'logger.js'));
+var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
 var config = require(path.join(__dirname, '..', '..', 'config', 'config.js'));
 var googleAuthUtils = require(path.join(__dirname, '..', 'utils', 'googleAuthUtils.js'));
+var visibleFields = require(path.join(__dirname, '..', '..', 'models', 'fields', 'visibleFields.js'));
 
 var registerUser = module.exports.registerUser = function(req, res, callback) {
 
@@ -11,27 +12,29 @@ var registerUser = module.exports.registerUser = function(req, res, callback) {
     var email = req.body.email;
     var pass = req.body.passwordHash;
 
-    UserModel.findOne({email:email}, function(err, doc) {
-        if(err) {
+    UserModel.findOne({
+        email: email
+    }, function(err, doc) {
+        if (err) {
             logger.error("Problem while finding user.");
             return callback(err);
         }
 
         var user;
 
-        if(doc) {
+        if (doc) {
             // Found user with this email.
             // Checking whether this user was previously authenticated with password or with Google.
             //  If with Google, then adding password credentials and returning the user.
             //  If with password, then error: email-password user already exists.
 
-            if(doc.authentications.local && doc.authentications.local.password) {
+            if (doc.authentications.local && doc.authentications.local.password) {
                 var msg = "User already exists. User email: " + doc.authentications.local.email;
                 logger.info(msg);
                 return callback(msg, doc);
             }
 
-            if(doc.authentications.google && doc.authentications.google.userId) {
+            if (doc.authentications.google && doc.authentications.google.userId) {
                 user = doc;
             }
         } else {
@@ -45,7 +48,7 @@ var registerUser = module.exports.registerUser = function(req, res, callback) {
         user.authentications.local.password = pass;
 
         user.save(function(err, doc) {
-            if(err) {
+            if (err) {
                 logger.error("Error saving user to db. Possibly required fields missing.");
                 return callback(err);
             }
@@ -59,41 +62,43 @@ var registerUser = module.exports.registerUser = function(req, res, callback) {
 };
 
 
-var registerGoogleUser = module.exports.registerGoogleUser  = function(req, res, callback) {
+var registerGoogleUser = module.exports.registerGoogleUser = function(req, res, callback) {
 
     var name = req.body.name;
     var surname = req.body.surname;
     var token = req.body.token;
 
     googleAuthUtils.authenticate(token, config.get('auth.client_id'), function(err, login) {
-        if(err) {
+        if (err) {
             return callback(err);
         }
 
         var email = login.getPayload().email;
         var googleUserId = login.getPayload().sub;
 
-        UserModel.findOne({email:email}, function(err, doc) {
-            if(err) {
+        UserModel.findOne({
+            email: email
+        }, function(err, doc) {
+            if (err) {
                 logger.error("Problem while finding user with email " + email);
                 return callback(err);
             }
 
             var user;
 
-            if(doc) {
+            if (doc) {
                 // Found user with this email.
                 // Checking whether this user was previously authenticated with password or with Google.
                 //  If with password, then adding Google credentials and returning the user.
                 //  If with Google, then error: google user already exists.
 
-                if(doc.authentications.google && doc.authentications.google.userId) {
+                if (doc.authentications.google && doc.authentications.google.userId) {
                     var msg = "Google user already exists. Google userID: " + doc.authentications.google.userId;
                     logger.info(msg);
                     return callback(msg, doc);
                 }
 
-                if(doc.authentications.local && doc.authentications.local.password) {
+                if (doc.authentications.local && doc.authentications.local.password) {
                     user = doc;
                 }
             } else {
@@ -107,7 +112,7 @@ var registerGoogleUser = module.exports.registerGoogleUser  = function(req, res,
             user.authentications.google.email = email;
 
             user.save(function(err, doc) {
-                if(err) {
+                if (err) {
                     logger.error("Error saving user to db. Possibly required fields missing.");
                     return callback(err);
                 }
@@ -120,4 +125,16 @@ var registerGoogleUser = module.exports.registerGoogleUser  = function(req, res,
         });
 
     });
+};
+
+var hideUserPrivateFields = module.exports.hideUserPrivateFields = function(user){
+    var userPublicVisibleFields = visibleFields.UserPublic;
+    var out = {};
+    for (var key in user){
+        if(userPublicVisibleFields.indexOf(key) >= 0){
+            out[key] = user[key];
+            console.log("here");
+        }
+    }
+    return out;
 };

@@ -3,7 +3,9 @@ var express = require('express');
 var router = express.Router();
 var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
 var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
+var userUtils = require(path.join(__dirname, '..', 'utils', 'userUtils.js'));
 var statusCodes = require('http-status-codes');
+var auth = require('basic-auth');
 
 /**
  * @api {get} /api/user/:id Request user information
@@ -18,18 +20,25 @@ var statusCodes = require('http-status-codes');
  * @apiError (500) {String} msg Internal server error
  */
 router.get('/:id', function(req, res, next) {
+    var loggedInUser = auth(req);
     var userId = req.params.id;
     UserModel.findById(userId, function(err, user) {
-        if(err) {
+        if (err) {
             return next(err);
         }
-        if(!user) {
+        if (!user) {
             //TODO this should be handled in a generic way in the error handler
             logger.error("User with id " + userId + " not found.");
-            return res.status(statusCodes.NOT_FOUND).json({msg: "User not found."});
+            return res.status(statusCodes.NOT_FOUND).json({
+                msg: "User not found."
+            });
+        }
+        if(loggedInUser.email != user.email){
+            return res.status(statusCodes.OK).json(userUtils.hideUserPrivateFields(user));
         }
         return res.status(statusCodes.OK).json(user);
     });
+
 });
 
 

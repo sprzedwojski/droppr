@@ -27,6 +27,7 @@ var errorHelper = require(path.join(__dirname, '..', '..', 'utils', 'errorHelper
  * @apiError (500) {String} msg Internal server error
  */
 router.get('/', function(req, res, next) {
+    console.log("entered");
     eventUtils.createEventFilterDataHolder(req, function(err, data) {
         if (err) {
             return next(errorHelper(err));
