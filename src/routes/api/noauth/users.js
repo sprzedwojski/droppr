@@ -1,9 +1,9 @@
 var path = require('path');
 var express = require('express');
 var router = express.Router();
-var UserModel = require(path.join(__dirname, '..', '..', 'models', 'user.js'));
-var logger = require(path.join(__dirname, '..', '..', 'utils', 'logger.js'));
-var userUtils = require(path.join(__dirname, '..', 'utils', 'userUtils.js'));
+var UserModel = require(path.join(__dirname, '..', '..', '..', 'models', 'user.js'));
+var logger = require(path.join(__dirname, '..', '..', '..', 'utils', 'logger.js'));
+var userUtils = require(path.join(__dirname, '..', '..', 'utils', 'userUtils.js'));
 var statusCodes = require('http-status-codes');
 var auth = require('basic-auth');
 

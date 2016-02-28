@@ -10,10 +10,11 @@ var fs = require('fs');
 
 var auth = require(path.join(__dirname, 'src', 'auth.js'));
 
-var users = require(path.join(__dirname, 'src', 'routes','api','users'));
+var usersNoAuth = require(path.join(__dirname, 'src', 'routes','api','noauth','users'));
 var userRegister = require(path.join(__dirname, 'src', 'routes','api','userRegister.js'));
 var googleAuth = require(path.join(__dirname, 'src', 'routes','api','googleAuth'));
-var events = require(path.join(__dirname, 'src', 'routes','api','events'));
+var eventsAuth = require(path.join(__dirname, 'src', 'routes','api','auth','events'));
+var eventsNoAuth = require(path.join(__dirname, 'src', 'routes','api','noauth','events'));
 
 var routeValidator = require(path.join(__dirname, 'routeValidator.js'));
 var mongoose = require('mongoose');
@@ -43,12 +44,13 @@ mongoose.connection.on('open', function() {
     // Unauthenticated middleware
     app.use('/api', googleAuth);
     app.use('/api/users', userRegister);
+    app.use('/api/events', eventsNoAuth);
+    app.use('/api/users', usersNoAuth);
 
     app.use(auth);
 
     // Authenticated middleware
-    app.use('/api/users', users);
-    app.use('/api/events', events);
+    app.use('/api/events', eventsAuth);
 
     // ==============================================
 
