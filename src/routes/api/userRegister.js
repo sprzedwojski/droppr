@@ -15,6 +15,7 @@ var authMethods = ["email", "google"];
  * @apiParam {String} [email] User's email
  * @apiParam {String} [name] User's name
  * @apiParam {String} [surname] User's surname
+ * @apiParam {String} [passwordHash] User's password
  * @apiParam {String} [token] User's google token
  *
  * @apiSuccess (201) {String} msg User created

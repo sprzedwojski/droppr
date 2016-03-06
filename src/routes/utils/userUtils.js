@@ -138,3 +138,8 @@ var hideUserPrivateFields = module.exports.hideUserPrivateFields = function(user
     }
     return out;
 };
+
+
+var createUserEditDataHolder = function(req, callback){
+
+};

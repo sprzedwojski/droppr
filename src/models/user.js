@@ -4,6 +4,7 @@ mongoose.set('debug', true);
 var path = require('path');
 var Models = require(path.join(__dirname,'models.js'));
 var rankList = require(path.join(__dirname, 'enums', 'rankList.js'));
+var roleList = require(path.join(__dirname, 'enums', 'roleList.js'));
 
 var Schema = mongoose.Schema;
 
@@ -60,7 +61,13 @@ var UserSchema = new Schema({
 		type: Schema.Types.ObjectId,
 		ref: Models.User,
 		required: false
-	}]
+	}],
+	role: {
+		type: String,
+		required: true,
+		enum: roleList,
+		default: "user"
+	}
 });
 
 UserSchema.plugin(timestamps);

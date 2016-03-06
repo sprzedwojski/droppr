@@ -6,6 +6,7 @@ var logger = require(path.join(__dirname, '..', '..', '..', 'utils', 'logger.js'
 var userUtils = require(path.join(__dirname, '..', '..', 'utils', 'userUtils.js'));
 var statusCodes = require('http-status-codes');
 var auth = require('basic-auth');
+var permissionValidator = require(path.join(__dirname, '..', '..', '..', 'utils', 'permissionValidator.js'));
 
 /**
  * @api {get} /api/user/:id Request user information
@@ -40,6 +41,16 @@ router.get('/:id', function(req, res, next) {
     });
 
 });
+
+
+router.put('/:id', function(req, res, next){
+    var loggedInUser = auth(req);
+    var userId = req.params.id;
+    if(!permissionValidator.canEditUser(loggedInUser, userId)){
+        return res.status(statusCodes.FORBIDDEN).json("Forbidden");
+    }
+});
+
 
 
 module.exports = router;

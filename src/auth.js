@@ -16,7 +16,7 @@ module.exports = function(req, res, next) {
     logger.debug("*** Beginning authorisation. ***");
 
     var authUser = auth(req);
-    console.log(authUser);
+    
     if(!authUser) {
         logger.error("No user in the header.");
         return returnUnauthorised(res);
